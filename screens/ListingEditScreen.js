@@ -1,3 +1,5 @@
+import { useNavigation } from '@react-navigation/native';
+import { API, Auth, graphqlOperation, Storage } from 'aws-amplify';
 import React, { useState } from 'react';
 import {
   Keyboard,
@@ -20,6 +22,8 @@ import {
 } from '../components/Forms';
 import Colors from '../constants/Colors';
 import { categories } from '../data/Categories';
+import routes from '../navigation/routes';
+import { createListing } from '../src/graphql/mutations';
 
 const validationSchema = Yup.object().shape({
   title: Yup.string().required().min(1).label('Title'),
@@ -33,8 +37,59 @@ const ListingEditScreen = () => {
   const colorScheme = useColorScheme();
   const [loading, setLoading] = useState(false);
   const [enableShift, setEnableShift] = useState(false);
+  const navigation = useNavigation();
 
-  const handleSubmit = () => {};
+  const uploadImage = async (uri) => {
+    try {
+      const response = await fetch(uri);
+
+      const blob = await response.blob();
+
+      const urlParts = uri.split('.');
+      const extension = urlParts[urlParts.length - 1];
+
+      const key = `${Math.random()}.${extension}`;
+
+      await Storage.put(key, blob, { contentType: 'image/jpeg' });
+
+      const url = await Storage.get(key);
+
+      return url;
+    } catch (error) {
+      console.log('Error @upLoadImage:', error);
+    }
+  };
+
+  const handleSubmit = async (values, { resetForm }) => {
+    setLoading(true);
+
+    const images = values.images;
+    let imagesUrl = [];
+    imagesUrl = await Promise.all(images.map((image) => uploadImage(image)));
+
+    try {
+      const userInfo = await Auth.currentAuthenticatedUser({
+        bypassCache: true,
+      });
+
+      const newListing = {
+        title: values.title,
+        price: values.price,
+        description: values.description,
+        category: values.category,
+        images: imagesUrl,
+        userID: userInfo.attributes.sub,
+      };
+
+      await API.graphql(graphqlOperation(createListing, { input: newListing }));
+      navigation.navigate(routes.LISTING);
+    } catch (error) {
+      console.log('Error @createListing:', error);
+    } finally {
+      resetForm({});
+      setLoading(false);
+    }
+  };
 
   return (
     <>
@@ -57,7 +112,9 @@ const ListingEditScreen = () => {
               images: [],
             }}
             validationSchema={validationSchema}
-            onSubmit={handleSubmit}
+            onSubmit={(values, { resetForm }) =>
+              handleSubmit(values, { resetForm })
+            }
           >
             <FormImagePicker name='images' />
             <FormField maxLength={255} name='title' placeholder='Title' />
