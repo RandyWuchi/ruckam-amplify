@@ -10,6 +10,7 @@ import AuthNavigator from './AuthNavigator';
 import BottomTabNavigator from './BottomTabNavigator';
 import LoadingScreen from '../screens/LoadingScreen';
 import { UserContext } from '../context/UserContext';
+import ListingEditScreen from '../screens/ListingEditScreen';
 
 export default Navigation = ({ colorScheme }) => {
   return (
@@ -34,6 +35,11 @@ const RootNavigator = () => {
       ) : (
         <Stack.Screen name='Auth' component={AuthNavigator} />
       )}
+      <Stack.Screen
+        name='ListingEdit'
+        component={ListingEditScreen}
+        options={{ headerShown: false }}
+      />
     </Stack.Navigator>
   );
 };

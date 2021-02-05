@@ -1,10 +1,12 @@
 import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
+import NewListingButton from '../components/NewListingButton';
 
 const ListingScreen = () => {
   return (
-    <View>
+    <View style={{ flex: 1 }}>
       <Text>Listing Screen</Text>
+      <NewListingButton />
     </View>
   );
 };

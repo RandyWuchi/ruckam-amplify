@@ -4,11 +4,11 @@ const UserContext = createContext([{}, () => {}]);
 
 const UserProvider = ({ children }) => {
   const [state, setState] = useState({
-    username: '',
+    name: '',
     email: '',
     id: '',
     isLoggedIn: null,
-    profilePhotoUrl: 'default',
+    imageUri: 'default',
   });
 
   return (

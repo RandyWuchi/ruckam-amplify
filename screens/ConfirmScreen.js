@@ -1,5 +1,5 @@
 import { useRoute } from '@react-navigation/native';
-import { Auth } from 'aws-amplify';
+import { API, Auth, Storage, graphqlOperation } from 'aws-amplify';
 import React, { useContext, useState } from 'react';
 import { KeyboardAvoidingView, StyleSheet, useColorScheme } from 'react-native';
 import * as Yup from 'yup';
@@ -15,6 +15,7 @@ import Colors from '../constants/Colors';
 import { UserContext } from '../context/UserContext';
 import { AuthContext } from '../context/AuthContext';
 import authStorage from '../auth/storage';
+import { createUser } from '../src/graphql/mutations';
 
 const validationSchema = Yup.object().shape({
   code: Yup.string().required().label('Confirm Code'),
@@ -28,6 +29,10 @@ const ConfirmScreen = () => {
   const [__, setAuth] = useContext(AuthContext);
   const route = useRoute();
 
+  const saveUserToDB = async (user) => {
+    await API.graphql(graphqlOperation(createUser, { input: user }));
+  };
+
   const handleSubmit = async ({ code }) => {
     const { email, password } = route.params;
     setLoading(true);
@@ -36,20 +41,31 @@ const ConfirmScreen = () => {
       await Auth.confirmSignUp(email, code, { forceAliasCreation: true });
 
       //sign in created user
-      const user = await Auth.signIn(email, password);
+      const createdUser = await Auth.signIn(email, password);
+
+      const key = createdUser.attributes.picture;
+
+      const profilePhotoUrl = await Storage.get(key);
+
+      const user = {
+        id: createdUser.attributes.sub,
+        email: createdUser.attributes.email,
+        name: createdUser.attributes.name,
+        imageUri: profilePhotoUrl,
+      };
+
+      await saveUserToDB(user);
 
       //Store Auth in authContext
-      setAuth(user);
+      setAuth(createdUser);
 
       //Store token in Auth storage
-      await authStorage.storeToken(user.signInUserSession.accessToken.jwtToken);
+      await authStorage.storeToken(
+        createdUser.signInUserSession.accessToken.jwtToken
+      );
 
       //Store User in User context
-      setUser({
-        username: user.attributes.name,
-        email: user.attributes.email,
-        id: user.attributes.sub,
-      });
+      setUser({ ...user, isLoggedIn: true });
     } catch (error) {
       setError(error.message);
     } finally {

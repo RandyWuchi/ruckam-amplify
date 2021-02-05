@@ -14,6 +14,9 @@ import { AuthProvider } from './context/AuthContext';
 
 export default function App() {
   const colorScheme = useColorScheme();
+  const [isReady, setIsReady] = useState(false);
+  const [_, setUser] = useState();
+  const [__, setAuth] = useState();
 
   return (
     <AuthProvider>

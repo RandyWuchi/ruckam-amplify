@@ -12,8 +12,6 @@ import ListingScreen from '../screens/ListingScreen';
 import MessagesRoomScreen from '../screens/MessagesRoomScreen';
 import MessagesScreen from '../screens/MessagesScreen';
 import MyListingsScreen from '../screens/MyListingsScreen';
-import NewListingButton from './NewListingButton';
-import routes from './routes';
 
 const BottomTab = createBottomTabNavigator();
 
@@ -44,20 +42,6 @@ export default function BottomTabNavigator() {
             <Ionicons name='mail' color={color} size={30} />
           ),
         }}
-      />
-      <BottomTab.Screen
-        name='ListingEdit'
-        component={TabThreeNavigator}
-        options={({ navigation }) => ({
-          tabBarButton: () => (
-            <NewListingButton
-              onPress={() => navigation.navigate(routes.LISTING_EDIT)}
-            />
-          ),
-          tabBarIcon: () => (
-            <Ionicons name='ios-add-circle' color={'#DB3022'} size={48} />
-          ),
-        })}
       />
       <BottomTab.Screen
         name='MyListing'
@@ -103,20 +87,6 @@ function TabtwoNavigator() {
       <TabTwoStack.Screen name='Messages' component={MessagesScreen} />
       <TabTwoStack.Screen name='MessagesRoom' component={MessagesRoomScreen} />
     </TabTwoStack.Navigator>
-  );
-}
-
-const TabThreeStack = createStackNavigator();
-
-function TabThreeNavigator() {
-  return (
-    <TabThreeStack.Navigator>
-      <TabThreeStack.Screen
-        name='ListingEdit'
-        component={ListingEditScreen}
-        options={{ headerShown: '' }}
-      />
-    </TabThreeStack.Navigator>
   );
 }
 
