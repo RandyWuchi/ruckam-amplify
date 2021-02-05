@@ -1,4 +1,6 @@
-import React from 'react';
+import { useNavigation } from '@react-navigation/native';
+import dayjs from 'dayjs';
+import React, { useState } from 'react';
 import {
   Image,
   StyleSheet,
@@ -11,7 +13,10 @@ import Colors from '../../constants/Colors';
 import Text from '../Text';
 import ListItemDeleteAction from './ListItemDeleteAction';
 
-const MessageListItem = () => {
+const MessageListItem = ({ chatRoom }) => {
+  const navigation = useNavigation();
+  const [otherUser, setOtherUser] = useState(null);
+
   const handleClick = () => {};
 
   const handleDelete = async () => {};
@@ -23,17 +28,28 @@ const MessageListItem = () => {
       <TouchableWithoutFeedback onPress={handleClick}>
         <View style={styles.container}>
           <View style={styles.leftContainer}>
-            <Image source={{ uri: imageUri }} style={styles.image} />
+            <Image source={{ uri: otherUser.imageUri }} style={styles.image} />
 
             <View style={styles.detailsContainer}>
-              <Text style={styles.username}>John Wick</Text>
+              <Text style={styles.username}>{otherUser.name}</Text>
               <Text style={styles.lastMessage} numberOfLines={1}>
-                How are you
+                {chatRoom.lastMessage
+                  ? `${chatRoom.lastMessage.user.name}: ${chatRoom.lastMessage.content}`
+                  : ''}
               </Text>
             </View>
           </View>
 
-          <Text style={styles.time}>27 January</Text>
+          <Text style={styles.time}>
+            {dayjs(chatRoom.lastMessage.createdAt).calendar(null, {
+              sameDay: '[Today at] h:mm A', // The same day ( Today at 2:30 AM )
+              nextDay: '[Tomorrow]', // The next day ( Tomorrow at 2:30 AM )
+              nextWeek: 'dddd', // The next week ( Sunday at 2:30 AM )
+              lastDay: '[Yesterday]', // The day before ( Yesterday at 2:30 AM )
+              lastWeek: '[Last] dddd', // Last week ( Last Monday at 2:30 AM )
+              sameElse: 'DD/MM/YYYY', // Everything else ( 7/10/2011 )
+            })}
+          </Text>
         </View>
       </TouchableWithoutFeedback>
     </Swipeable>

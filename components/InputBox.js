@@ -12,8 +12,9 @@ import {
 
 import Colors from '../constants/Colors';
 
-const InputBox = () => {
+const InputBox = ({ chatRoomID }) => {
   const [message, setMessage] = useState('');
+  const [myUserId, setMyUserId] = useState(null);
 
   const onMessageSend = async () => {};
 

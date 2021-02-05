@@ -3,7 +3,11 @@ import { StyleSheet, Text, View } from 'react-native';
 
 import Colors from '../constants/Colors';
 
-const MessageBox = () => {
+const MessageBox = ({ myId, message }) => {
+  const isMyMessage = () => {
+    return message.user.id === myId;
+  };
+
   return (
     <View
       style={[

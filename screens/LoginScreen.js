@@ -23,6 +23,7 @@ import {
 import Colors from '../constants/Colors';
 import { AuthContext } from '../context/AuthContext';
 import { UserContext } from '../context/UserContext';
+import authStorage from '../auth/storage';
 import routes from '../navigation/routes';
 
 const validationSchema = Yup.object().shape({
