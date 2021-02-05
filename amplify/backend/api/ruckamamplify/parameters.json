@@ -1,0 +1,11 @@
+{
+  "AppSyncApiName": "ruckamamplify",
+  "DynamoDBBillingMode": "PAY_PER_REQUEST",
+  "DynamoDBEnableServerSideEncryption": false,
+  "AuthCognitoUserPoolId": {
+    "Fn::GetAtt": [
+      "authruckamamplify5d9ac8ab",
+      "Outputs.UserPoolId"
+    ]
+  }
+}

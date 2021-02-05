@@ -1,21 +1,29 @@
 import { StatusBar } from 'expo-status-bar';
-import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import React, { useState } from 'react';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
+
+import Amplify from 'aws-amplify';
+import config from './src/aws-exports';
+Amplify.configure(config);
+
+import OfflineNotice from './components/OfflineNotice';
+import Navigation from './navigation/index';
+import { UserProvider } from './context/UserContext';
+import { useColorScheme } from 'react-native';
+import { AuthProvider } from './context/AuthContext';
 
 export default function App() {
+  const colorScheme = useColorScheme();
+
   return (
-    <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
+    <AuthProvider>
+      <UserProvider>
+        <OfflineNotice />
+        <SafeAreaProvider style={{ flex: 1 }}>
+          <Navigation colorScheme={colorScheme} />
+          <StatusBar style='auto' />
+        </SafeAreaProvider>
+      </UserProvider>
+    </AuthProvider>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});

@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import { Auth } from 'aws-amplify';
+import React, { useContext, useState } from 'react';
 import {
   Image,
   KeyboardAvoidingView,
@@ -20,6 +21,8 @@ import {
   SubmitButton,
 } from '../components/Forms';
 import Colors from '../constants/Colors';
+import { AuthContext } from '../context/AuthContext';
+import { UserContext } from '../context/UserContext';
 import routes from '../navigation/routes';
 
 const validationSchema = Yup.object().shape({
@@ -30,14 +33,31 @@ const validationSchema = Yup.object().shape({
 const LoginScreen = ({ navigation }) => {
   const [loginFailed, setLoginFailed] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [_, setUser] = useContext(UserContext);
+  const [__, setAuth] = useContext(AuthContext);
 
   const colorScheme = useColorScheme();
 
-  const handleSubmit = async () => {
+  const handleSubmit = async ({ email, password }) => {
     Keyboard.dismiss();
     setLoading(true);
 
     try {
+      //Sign in user
+      const user = await Auth.signIn(email, password);
+
+      //Store User in User context
+      setUser({
+        username: user.attributes.name,
+        email: user.attributes.email,
+        id: user.attributes.sub,
+      });
+
+      //Store user in authContext
+      setAuth(user);
+
+      //Store token in Auth storage
+      await authStorage.storeToken(user.signInUserSession.accessToken.jwtToken);
     } catch (error) {
       console.log('Error @login:', error.message);
       setLoginFailed(true);

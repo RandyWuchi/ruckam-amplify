@@ -1,3 +1,4 @@
+import { Auth, Storage } from 'aws-amplify';
 import React, { useState } from 'react';
 import {
   KeyboardAvoidingView,
@@ -24,7 +25,7 @@ import routes from '../navigation/routes';
 
 const validationSchema = Yup.object().shape({
   profilePhoto: Yup.string(),
-  username: Yup.string().required().label('Name'),
+  fullName: Yup.string().required().label('Name'),
   email: Yup.string().required().email().label('Email'),
   password: Yup.string().required().min(6).label('Password'),
 });
@@ -35,11 +36,43 @@ const RegisterScreen = ({ navigation }) => {
 
   const colorScheme = useColorScheme();
 
-  const handleSubmit = async () => {
+  const uploadImage = async (uri) => {
+    try {
+      const response = await fetch(uri);
+
+      const blob = await response.blob();
+
+      const urlParts = uri.split('.');
+      const extension = urlParts[urlParts.length - 1];
+
+      const key = `${Math.random()}.${extension}`;
+
+      await Storage.put(key, blob, { contentType: 'image/jpeg' });
+
+      return key;
+    } catch (error) {
+      console.log('Error @upLoadImage:', error);
+    }
+  };
+
+  const handleSubmit = async ({ fullName, email, password, profilePhoto }) => {
     Keyboard.dismiss();
     setLoading(true);
 
+    //Upload image to s3 storage
+    let profileImage;
+    profileImage = await uploadImage(profilePhoto);
+
     try {
+      //Register user
+      const { user } = await Auth.signUp({
+        username: email,
+        password,
+        attributes: { name: fullName, picture: profileImage },
+      });
+
+      //Navigate user to the confirm screen
+      user && navigation.navigate(routes.CONFIRM, { email, password });
     } catch (error) {
       setError(error.message);
     } finally {
@@ -60,7 +93,7 @@ const RegisterScreen = ({ navigation }) => {
         >
           <Form
             initialValues={{
-              username: '',
+              fullName: '',
               email: '',
               password: '',
               profilePhoto: null,
@@ -68,12 +101,12 @@ const RegisterScreen = ({ navigation }) => {
             onSubmit={handleSubmit}
             validationSchema={validationSchema}
           >
-            <ErrorMessage error={error} visible={error} />
             <FormProfileImage name='profilePhoto' />
+            <ErrorMessage error={error} visible={error} />
             <FormField
               autoCorrect={false}
               icon='account'
-              name='username'
+              name='fullName'
               placeholder='Name'
             />
             <FormField
