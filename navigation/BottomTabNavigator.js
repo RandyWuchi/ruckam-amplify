@@ -93,7 +93,16 @@ function TabtwoNavigator({ navigation, route }) {
   return (
     <TabTwoStack.Navigator>
       <TabTwoStack.Screen name='Messages' component={MessagesScreen} />
-      <TabTwoStack.Screen name='MessagesRoom' component={MessagesRoomScreen} />
+      <TabTwoStack.Screen
+        name='MessagesRoom'
+        component={MessagesRoomScreen}
+        options={({ route }) => ({
+          title: route.params.name,
+          headerBackTitle: '',
+          headerTintColor: Colors.light.tint,
+          headerTitleStyle: { fontWeight: 'bold' },
+        })}
+      />
     </TabTwoStack.Navigator>
   );
 }

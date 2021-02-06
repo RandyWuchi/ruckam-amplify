@@ -45,7 +45,7 @@ const InputBox = ({ chatRoomID }) => {
   const onMessageSend = async () => {
     //Send message to backend
     try {
-      const newMessageData = API.graphql(
+      const newMessageData = await API.graphql(
         graphqlOperation(createMessage, {
           input: {
             content: message,

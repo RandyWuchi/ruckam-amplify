@@ -20,16 +20,16 @@ const MessageBox = ({ myId, message }) => {
         style={[
           styles.messageBox,
           {
-            backgroundColor: isMyMessage() ? Colors.light.primary : 'white',
+            backgroundColor: isMyMessage() ? '#DCF8C5' : 'white',
             marginLeft: isMyMessage() ? 60 : 0,
             marginRight: isMyMessage() ? 0 : 60,
-            marginBottom: isMyMessage() ? 2 : 10,
+            marginBottom: isMyMessage() ? 2 : 5,
           },
         ]}
       >
         {!isMyMessage() && <Text style={styles.name}>{message.user.name}</Text>}
         <Text style={styles.message}>{message.content} </Text>
-        <Text style={styles.time}>
+        <Text style={[styles.time]}>
           {dayjs(message.createdAt).format('h:mm A')}
         </Text>
       </View>
@@ -42,7 +42,9 @@ export default MessageBox;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 5,
+    paddingLeft: 10,
+    paddingRight: 10,
+    marginBottom: 5,
   },
   messageBox: {
     borderRadius: 15,
@@ -58,10 +60,10 @@ const styles = StyleSheet.create({
   },
   message: {
     marginBottom: 5,
+    fontSize: 16,
   },
   time: {
     alignSelf: 'flex-end',
     fontSize: 10,
-    color: 'grey',
   },
 });
