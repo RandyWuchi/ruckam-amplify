@@ -1,5 +1,6 @@
 import { MaterialCommunityIcons } from '@expo/vector-icons';
-import React, { useState } from 'react';
+import { API, Auth, graphqlOperation } from 'aws-amplify';
+import React, { useEffect, useState } from 'react';
 import {
   KeyboardAvoidingView,
   Platform,
@@ -11,12 +12,57 @@ import {
 } from 'react-native';
 
 import Colors from '../constants/Colors';
+import { createMessage, updateChatRoom } from '../src/graphql/mutations';
 
 const InputBox = ({ chatRoomID }) => {
   const [message, setMessage] = useState('');
   const [myUserId, setMyUserId] = useState(null);
 
-  const onMessageSend = async () => {};
+  useEffect(() => {
+    const fetchUser = async () => {
+      const currentUser = await Auth.currentAuthenticatedUser();
+      setMyUserId(currentUser.attributes.sub);
+    };
+
+    fetchUser();
+  }, []);
+
+  const updateLastMessageId = async (messageId) => {
+    try {
+      await API.graphql(
+        graphqlOperation(updateChatRoom, {
+          input: {
+            id: chatRoomID,
+            lastMessageID: messageId,
+          },
+        })
+      );
+    } catch (error) {
+      console.log('Error @updateLastMessageId:', error);
+    }
+  };
+
+  const onMessageSend = async () => {
+    //Send message to backend
+    try {
+      const newMessageData = API.graphql(
+        graphqlOperation(createMessage, {
+          input: {
+            content: message,
+            userID: myUserId,
+            chatRoomID,
+          },
+        })
+      );
+
+      //Update last message ID
+      await updateLastMessageId(newMessageData.data.createMessage.id);
+    } catch (error) {
+      console.log('Error @onMessageSend:', error);
+    }
+
+    setMessage('');
+  };
 
   const onMicPress = () => {
     console.warn('Microphone');
@@ -47,7 +93,6 @@ const InputBox = ({ chatRoomID }) => {
               editable
               accessible
               accessibilityLabel='Type a message'
-              autoFocus
               enablesReturnKeyAutomatically
             />
 
@@ -100,8 +145,8 @@ const styles = StyleSheet.create({
   mainContainer: {
     flexDirection: 'row',
     backgroundColor: 'white',
-    padding: 10,
-    borderRadius: 10,
+    padding: 5,
+    borderRadius: 30,
     marginRight: 5,
     flex: 1,
     justifyContent: 'center',
@@ -125,7 +170,7 @@ const styles = StyleSheet.create({
     flex: 1,
     marginLeft: 10,
     fontSize: 16,
-    lineHeight: 16,
+    lineHeight: 20,
     ...Platform.select({
       web: {
         paddingTop: 6,
@@ -138,9 +183,9 @@ const styles = StyleSheet.create({
       web: 6,
     }),
     marginBottom: Platform.select({
-      ios: 5,
-      android: 3,
-      web: 4,
+      ios: 10,
+      android: 6,
+      web: 8,
     }),
   },
   icon: {

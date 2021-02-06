@@ -1,5 +1,6 @@
 import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
+import dayjs from 'dayjs';
 
 import Colors from '../constants/Colors';
 
@@ -28,7 +29,9 @@ const MessageBox = ({ myId, message }) => {
       >
         {!isMyMessage() && <Text style={styles.name}>{message.user.name}</Text>}
         <Text style={styles.message}>{message.content} </Text>
-        <Text style={styles.time}>3 minutes ago</Text>
+        <Text style={styles.time}>
+          {dayjs(message.createdAt).format('h:mm A')}
+        </Text>
       </View>
     </View>
   );

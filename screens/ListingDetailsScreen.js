@@ -36,6 +36,7 @@ const ListingDetailsScreen = ({ route, navigation }) => {
         styles.container,
         { backgroundColor: Colors[colorScheme].background },
       ]}
+      behavior='position'
     >
       <ScrollView>
         <S3Image imgKey={listing.images[0]} style={styles.image} />
@@ -52,6 +53,7 @@ const ListingDetailsScreen = ({ route, navigation }) => {
           <ContactSellerForm listing={listing} />
         </View>
       </ScrollView>
+      <View style={{ height: 100 }} />
     </KeyboardAvoidingView>
   );
 };

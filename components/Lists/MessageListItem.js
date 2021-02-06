@@ -1,13 +1,10 @@
 import { useNavigation } from '@react-navigation/native';
+import { Auth } from 'aws-amplify';
 import dayjs from 'dayjs';
-import React, { useState } from 'react';
-import {
-  Image,
-  StyleSheet,
-  TouchableWithoutFeedback,
-  View,
-} from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { StyleSheet, TouchableWithoutFeedback, View } from 'react-native';
 import Swipeable from 'react-native-gesture-handler/Swipeable';
+import { S3Image } from 'aws-amplify-react-native';
 
 import Colors from '../../constants/Colors';
 import Text from '../Text';
@@ -17,10 +14,37 @@ const MessageListItem = ({ chatRoom }) => {
   const navigation = useNavigation();
   const [otherUser, setOtherUser] = useState(null);
 
-  const handleClick = () => {};
+  useEffect(() => {
+    const getOtherUser = async () => {
+      try {
+        const currentUser = await Auth.currentAuthenticatedUser();
+
+        if (
+          chatRoom.chatRoomUsers.items[0].user.id === currentUser.attributes.sub
+        ) {
+          setOtherUser(chatRoom.chatRoomUsers.items[1].user);
+        } else {
+          setOtherUser(chatRoom.chatRoomUsers.items[0].user);
+        }
+      } catch (error) {
+        console.log('Error @getOtherUser:', error);
+      }
+    };
+    getOtherUser();
+  }, []);
+
+  const handleClick = () => {
+    navigation.navigate('MessagesRoom', {
+      id: chatRoom.id,
+      name: otherUser.name,
+    });
+  };
 
   const handleDelete = async () => {};
 
+  if (!otherUser) {
+    return null;
+  }
   return (
     <Swipeable
       renderRightActions={() => <ListItemDeleteAction onPress={handleDelete} />}
@@ -28,27 +52,20 @@ const MessageListItem = ({ chatRoom }) => {
       <TouchableWithoutFeedback onPress={handleClick}>
         <View style={styles.container}>
           <View style={styles.leftContainer}>
-            <Image source={{ uri: otherUser.imageUri }} style={styles.image} />
+            <S3Image imgKey={otherUser.imageUri} style={styles.image} />
 
             <View style={styles.detailsContainer}>
               <Text style={styles.username}>{otherUser.name}</Text>
               <Text style={styles.lastMessage} numberOfLines={1}>
-                {chatRoom.lastMessage
-                  ? `${chatRoom.lastMessage.user.name}: ${chatRoom.lastMessage.content}`
-                  : ''}
+                {chatRoom.lastMessage ? ` ${chatRoom.lastMessage.content}` : ''}
               </Text>
             </View>
           </View>
 
           <Text style={styles.time}>
-            {dayjs(chatRoom.lastMessage.createdAt).calendar(null, {
-              sameDay: '[Today at] h:mm A', // The same day ( Today at 2:30 AM )
-              nextDay: '[Tomorrow]', // The next day ( Tomorrow at 2:30 AM )
-              nextWeek: 'dddd', // The next week ( Sunday at 2:30 AM )
-              lastDay: '[Yesterday]', // The day before ( Yesterday at 2:30 AM )
-              lastWeek: '[Last] dddd', // Last week ( Last Monday at 2:30 AM )
-              sameElse: 'DD/MM/YYYY', // Everything else ( 7/10/2011 )
-            })}
+            {dayjs(
+              chatRoom.lastMessage.updatedAt || chatRoom.lastMessage.createdAt
+            ).format('h:mm A')}
           </Text>
         </View>
       </TouchableWithoutFeedback>

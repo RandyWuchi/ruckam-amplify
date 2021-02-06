@@ -1,5 +1,6 @@
 import { Ionicons } from '@expo/vector-icons';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { getFocusedRouteNameFromRoute } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import * as React from 'react';
 import { useColorScheme } from 'react-native';
@@ -7,7 +8,6 @@ import { useColorScheme } from 'react-native';
 import Colors from '../constants/Colors';
 import AccountScreen from '../screens/AccountScreen';
 import ListingDetailsScreen from '../screens/ListingDetailsScreen';
-import ListingEditScreen from '../screens/ListingEditScreen';
 import ListingScreen from '../screens/ListingScreen';
 import MessagesRoomScreen from '../screens/MessagesRoomScreen';
 import MessagesScreen from '../screens/MessagesScreen';
@@ -81,7 +81,15 @@ function TabOneNavigator() {
 
 const TabTwoStack = createStackNavigator();
 
-function TabtwoNavigator() {
+function TabtwoNavigator({ navigation, route }) {
+  React.useLayoutEffect(() => {
+    const routeName = getFocusedRouteNameFromRoute(route);
+    if (routeName === 'MessagesRoom') {
+      navigation.setOptions({ tabBarVisible: false });
+    } else {
+      navigation.setOptions({ tabBarVisible: true });
+    }
+  }, [navigation, route]);
   return (
     <TabTwoStack.Navigator>
       <TabTwoStack.Screen name='Messages' component={MessagesScreen} />
