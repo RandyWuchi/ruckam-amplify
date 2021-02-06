@@ -52,9 +52,7 @@ const ListingEditScreen = () => {
 
       await Storage.put(key, blob, { contentType: 'image/jpeg' });
 
-      const url = await Storage.get(key);
-
-      return url;
+      return key;
     } catch (error) {
       console.log('Error @upLoadImage:', error);
     }

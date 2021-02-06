@@ -1,7 +1,8 @@
 import React from 'react';
-import { View, StyleSheet, Image, TouchableHighlight } from 'react-native';
+import { View, StyleSheet, TouchableHighlight } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import Swipeable from 'react-native-gesture-handler/Swipeable';
+import { S3Image } from 'aws-amplify-react-native';
 
 import Text from '../Text';
 import Colors from '../../constants/Colors';
@@ -19,7 +20,7 @@ function ListItem({
       <TouchableHighlight underlayColor={Colors.light.light} onPress={onPress}>
         <View style={styles.container}>
           {IconComponent}
-          {image && <Image style={styles.image} source={{ uri: image }} />}
+          {image && <S3Image style={styles.image} imgKey={image} />}
           <View style={styles.detailsContainer}>
             <Text style={styles.title} numberOfLines={1}>
               {title}

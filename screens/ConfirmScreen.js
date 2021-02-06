@@ -1,5 +1,5 @@
 import { useRoute } from '@react-navigation/native';
-import { API, Auth, Storage, graphqlOperation } from 'aws-amplify';
+import { API, Auth, graphqlOperation } from 'aws-amplify';
 import React, { useContext, useState } from 'react';
 import { KeyboardAvoidingView, StyleSheet, useColorScheme } from 'react-native';
 import * as Yup from 'yup';
@@ -43,15 +43,11 @@ const ConfirmScreen = () => {
       //sign in created user
       const createdUser = await Auth.signIn(email, password);
 
-      const key = createdUser.attributes.picture;
-
-      const profilePhotoUrl = await Storage.get(key);
-
       const user = {
         id: createdUser.attributes.sub,
         email: createdUser.attributes.email,
         name: createdUser.attributes.name,
-        imageUri: profilePhotoUrl,
+        imageUri: createdUser.attributes.picture,
       };
 
       await saveUserToDB(user);

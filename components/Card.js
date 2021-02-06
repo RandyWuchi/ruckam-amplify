@@ -1,11 +1,11 @@
 import React from 'react';
 import {
-  Image,
   StyleSheet,
   TouchableWithoutFeedback,
   useColorScheme,
   View,
 } from 'react-native';
+import { S3Image } from 'aws-amplify-react-native';
 
 import Colors from '../constants/Colors';
 import Text from './Text';
@@ -20,7 +20,7 @@ const Card = ({ title, subTitle, image, onPress }) => {
           { backgroundColor: Colors[colorScheme].background },
         ]}
       >
-        <Image style={styles.image} source={{ uri: image }} />
+        <S3Image style={styles.image} imgKey={image} />
         <View style={styles.detailsContainer}>
           <Text style={styles.title}>{title}</Text>
           <Text style={styles.subTitle}>{subTitle}</Text>

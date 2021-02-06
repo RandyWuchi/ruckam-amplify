@@ -1,4 +1,4 @@
-import { Auth, Storage } from 'aws-amplify';
+import { Auth } from 'aws-amplify';
 import React, { useContext, useState } from 'react';
 import {
   Image,
@@ -49,14 +49,12 @@ const LoginScreen = ({ navigation }) => {
 
       const key = user.attributes.picture;
 
-      const profilePhotoUrl = await Storage.get(key);
-
       //Store User in User context
       setUser({
         name: user.attributes.name,
         email: user.attributes.email,
         id: user.attributes.sub,
-        imageUri: profilePhotoUrl,
+        imageUri: user.attributes.picture,
         isLoggedIn: true,
       });
 

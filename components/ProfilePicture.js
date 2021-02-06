@@ -1,12 +1,13 @@
 import React from 'react';
-import { Image, StyleSheet, TouchableOpacity, View } from 'react-native';
+import { StyleSheet, TouchableOpacity, View } from 'react-native';
+import { S3Image } from 'aws-amplify-react-native';
 import Colors from '../constants/Colors';
 
 const ProfilePicture = ({ image }) => {
   return (
     <View style={styles.container}>
       <TouchableOpacity activeOpacity={0.5}>
-        <Image source={{ uri: image }} style={styles.image} />
+        <S3Image imgKey={image} style={styles.image} />
       </TouchableOpacity>
     </View>
   );

@@ -1,5 +1,7 @@
-import React, { useContext, useLayoutEffect, useState } from 'react';
+import { API, graphqlOperation } from 'aws-amplify';
+import React, { useContext, useEffect, useLayoutEffect, useState } from 'react';
 import { FlatList, SafeAreaView, StyleSheet, View } from 'react-native';
+import Button from '../components/Button';
 
 import Card from '../components/Card';
 import NewListingButton from '../components/NewListingButton';
@@ -8,6 +10,7 @@ import Text from '../components/Text';
 import Colors from '../constants/Colors';
 import { UserContext } from '../context/UserContext';
 import routes from '../navigation/routes';
+import { listListings } from '../src/graphql/queries';
 
 const ListingScreen = ({ navigation }) => {
   const [listings, setListings] = useState([]);
@@ -23,18 +26,35 @@ const ListingScreen = ({ navigation }) => {
         color: Colors.light.primary,
         fontWeight: 'bold',
       },
-      //headerTintColor: Colors.light.primary,
       headerLeft: () => <ProfilePicture image={user.imageUri} />,
     });
   }, []);
 
-  const fetchListings = async () => {};
+  const fetchListings = async () => {
+    setRefreshing(true);
+
+    try {
+      const fetchedListing = await API.graphql(graphqlOperation(listListings));
+      setListings(fetchedListing.data.listListings.items);
+    } catch (error) {
+      console.log('Error @fetchListing:', error);
+    } finally {
+      setRefreshing(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchListings();
+  }, []);
 
   return (
     <SafeAreaView style={{ flex: 1 }}>
       {listings.length === 0 ? (
         <View style={styles.noListing}>
           <Text style={styles.text}> There are no listings available</Text>
+          <View>
+            <Button onPress={fetchListings} title='reload' />
+          </View>
         </View>
       ) : (
         <FlatList
@@ -47,7 +67,7 @@ const ListingScreen = ({ navigation }) => {
               <Card
                 title={item.title}
                 subTitle={'$' + item.price}
-                image={item.images}
+                image={item.images[0]}
                 onPress={() =>
                   navigation.navigate(routes.LISTING_DETAILS, item)
                 }

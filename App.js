@@ -1,5 +1,5 @@
 import { StatusBar } from 'expo-status-bar';
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 import Amplify from 'aws-amplify';
@@ -16,8 +16,8 @@ import Colors from './constants/Colors';
 export default function App() {
   const colorScheme = useColorScheme();
   const [isReady, setIsReady] = useState(false);
-  const [_, setUser] = useState(UserContext);
-  const [__, setAuth] = useState(AuthContext);
+  const [_, setUser] = useContext(UserContext);
+  const [__, setAuth] = useContext(AuthContext);
 
   return (
     <AuthProvider>

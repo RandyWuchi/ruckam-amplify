@@ -7,6 +7,7 @@ import {
   useColorScheme,
   View,
 } from 'react-native';
+import { S3Image } from 'aws-amplify-react-native';
 
 import ContactSellerForm from '../components/ContactSellerForm';
 import { ListItem } from '../components/Lists';
@@ -25,7 +26,7 @@ const ListingDetailsScreen = ({ route }) => {
       ]}
     >
       <ScrollView>
-        <Image source={{ uri: listing.images }} style={styles.image} />
+        <S3Image imgKey={listing.images[0]} style={styles.image} />
         <View style={styles.detailsContainer}>
           <Text style={styles.title}>{listing.title}</Text>
           <Text style={styles.price}>{listing.price}</Text>
