@@ -7,7 +7,6 @@ const UserProvider = ({ children }) => {
     name: '',
     email: '',
     id: '',
-    isLoggedIn: null,
     imageUri: 'default',
   });
 

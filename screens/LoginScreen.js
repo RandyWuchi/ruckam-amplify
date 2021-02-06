@@ -47,8 +47,6 @@ const LoginScreen = ({ navigation }) => {
       //Sign in user
       const user = await Auth.signIn(email, password);
 
-      const key = user.attributes.picture;
-
       //Store User in User context
       setUser({
         name: user.attributes.name,
