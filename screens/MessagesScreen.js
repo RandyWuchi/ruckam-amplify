@@ -1,11 +1,29 @@
-import React, { useState } from 'react';
+import React, { useContext, useLayoutEffect, useState } from 'react';
 import { FlatList, StyleSheet, View } from 'react-native';
 
 import { ListItemSeparator, MessageListItem } from '../components/Lists';
+import ProfilePicture from '../components/ProfilePicture';
 import Text from '../components/Text';
+import Colors from '../constants/Colors';
+import { UserContext } from '../context/UserContext';
 
-const MessagesScreen = () => {
+const MessagesScreen = ({ navigation }) => {
   const [chatRooms, setChatRooms] = useState([]);
+  const [user] = useContext(UserContext);
+
+  useLayoutEffect(() => {
+    navigation.setOptions({
+      title: 'Messages',
+      headerStyle: { backgroundColor: Colors.light.white },
+      headerTitleStyle: {
+        fontSize: 20,
+        color: Colors.light.primary,
+        fontWeight: 'bold',
+      },
+      headerLeft: () => <ProfilePicture image={user.imageUri} />,
+    });
+  }, []);
+
   return (
     <View style={[styles.container]}>
       {chatRooms.length === 0 ? (

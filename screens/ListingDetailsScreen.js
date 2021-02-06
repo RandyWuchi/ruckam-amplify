@@ -1,6 +1,5 @@
-import React from 'react';
+import React, { useLayoutEffect } from 'react';
 import {
-  Image,
   KeyboardAvoidingView,
   ScrollView,
   StyleSheet,
@@ -14,9 +13,22 @@ import { ListItem } from '../components/Lists';
 import Text from '../components/Text';
 import Colors from '../constants/Colors';
 
-const ListingDetailsScreen = ({ route }) => {
+const ListingDetailsScreen = ({ route, navigation }) => {
   const colorScheme = useColorScheme();
   const listing = route.params;
+
+  useLayoutEffect(() => {
+    navigation.setOptions({
+      headerBackTitle: '',
+      headerTintColor: Colors.light.primary,
+      title: 'Details',
+      headerTitleStyle: {
+        fontSize: 18,
+        color: Colors.light.primary,
+        fontWeight: 'bold',
+      },
+    });
+  }, []);
 
   return (
     <KeyboardAvoidingView
@@ -29,7 +41,7 @@ const ListingDetailsScreen = ({ route }) => {
         <S3Image imgKey={listing.images[0]} style={styles.image} />
         <View style={styles.detailsContainer}>
           <Text style={styles.title}>{listing.title}</Text>
-          <Text style={styles.price}>{listing.price}</Text>
+          <Text style={styles.price}>{'$' + listing.price}</Text>
           <View style={styles.userContainer}>
             <ListItem
               image={listing.user.imageUri}

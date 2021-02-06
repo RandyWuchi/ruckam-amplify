@@ -121,7 +121,6 @@ const LoginScreen = ({ navigation }) => {
               </Text>
             </TouchableOpacity>
           </Form>
-          <View style={{ height: 50 }} />
         </KeyboardAvoidingView>
       </TouchableWithoutFeedback>
     </>

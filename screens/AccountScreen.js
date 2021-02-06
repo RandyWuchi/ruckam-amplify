@@ -1,5 +1,5 @@
 import { Auth } from 'aws-amplify';
-import React, { useContext } from 'react';
+import React, { useContext, useLayoutEffect } from 'react';
 import { FlatList, StyleSheet, Text, View } from 'react-native';
 
 import Icon from '../components/Icon';
@@ -9,10 +9,23 @@ import { AuthContext } from '../context/AuthContext';
 import { UserContext } from '../context/UserContext';
 import { menuItems } from '../data/MenuItems';
 import authStorage from '../auth/storage';
+import Colors from '../constants/Colors';
 
-const AccountScreen = () => {
+const AccountScreen = ({ navigation }) => {
   const [user, setUser] = useContext(UserContext);
   const [_, setAuth] = useContext(AuthContext);
+
+  useLayoutEffect(() => {
+    navigation.setOptions({
+      title: 'Account',
+      headerStyle: { backgroundColor: Colors.light.white },
+      headerTitleStyle: {
+        fontSize: 20,
+        color: Colors.light.primary,
+        fontWeight: 'bold',
+      },
+    });
+  }, []);
 
   const handleLogOut = async () => {
     try {

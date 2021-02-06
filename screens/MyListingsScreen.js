@@ -1,19 +1,30 @@
 import { API, graphqlOperation } from 'aws-amplify';
-import React, { useContext, useState } from 'react';
+import React, { useContext, useEffect, useLayoutEffect, useState } from 'react';
 import { FlatList, StyleSheet, View } from 'react-native';
 
 import NewListingButton from '../components/NewListingButton';
 import ProductCard from '../components/ProductCard';
 import Text from '../components/Text';
+import Colors from '../constants/Colors';
 import { UserContext } from '../context/UserContext';
 import { getUser } from '../src/graphql/queries';
 
-const MyListingsScreen = () => {
+const MyListingsScreen = ({ navigation }) => {
   const [myListings, setMyListings] = useState([]);
   const [refreshing, setRefreshing] = useState(false);
   const [user] = useContext(UserContext);
 
-  console.log(myListings);
+  useLayoutEffect(() => {
+    navigation.setOptions({
+      title: 'My Listing',
+      headerStyle: { backgroundColor: Colors.light.white },
+      headerTitleStyle: {
+        fontSize: 20,
+        color: Colors.light.primary,
+        fontWeight: 'bold',
+      },
+    });
+  }, []);
 
   const fetchMyListings = async () => {
     setRefreshing(true);
@@ -30,6 +41,10 @@ const MyListingsScreen = () => {
       setRefreshing(false);
     }
   };
+
+  useEffect(() => {
+    fetchMyListings();
+  }, []);
 
   return (
     <View style={styles.container}>
