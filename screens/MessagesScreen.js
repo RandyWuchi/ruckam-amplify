@@ -14,8 +14,6 @@ const MessagesScreen = ({ navigation }) => {
   const [chatRooms, setChatRooms] = useState([]);
   const [user] = useContext(UserContext);
 
-  console.log(chatRooms);
-
   useLayoutEffect(() => {
     navigation.setOptions({
       title: 'Messages',
@@ -50,9 +48,8 @@ const MessagesScreen = ({ navigation }) => {
     const subscription = API.graphql(
       graphqlOperation(onUpdateChatRoom)
     ).subscribe({
-      next: (data) => {
-        const newMessageRoom = data.value.data.onUpdateChatRoom;
-        console.log(newMessageRoom);
+      next: () => {
+        fetchMessagesRooms();
       },
     });
 

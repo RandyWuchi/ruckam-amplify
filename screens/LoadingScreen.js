@@ -1,3 +1,4 @@
+import { Auth } from 'aws-amplify';
 import React, { useContext, useEffect } from 'react';
 import { StyleSheet, Text, useColorScheme, View } from 'react-native';
 import LottieView from 'lottie-react-native';
@@ -11,7 +12,19 @@ const LoadingScreen = () => {
 
   useEffect(() => {
     setTimeout(async () => {
-      setUser((state) => ({ ...state, isLoggedIn: false }));
+      const user = await Auth.currentAuthenticatedUser();
+
+      if (user) {
+        setUser({
+          isLoggedIn: true,
+          id: user.attributes.sub,
+          email: user.attributes.email,
+          name: user.attributes.name,
+          imageUri: user.attributes.picture,
+        });
+      } else {
+        setUser((state) => ({ ...state, isLoggedIn: false }));
+      }
     }, 1500);
   }, []);
 

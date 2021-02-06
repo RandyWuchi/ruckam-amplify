@@ -8,6 +8,7 @@ const UserProvider = ({ children }) => {
     email: '',
     id: '',
     imageUri: 'default',
+    isLoggedIn: null,
   });
 
   return (

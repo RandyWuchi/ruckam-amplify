@@ -6,7 +6,7 @@ import LoginScreen from '../screens/LoginScreen';
 import RegisterScreen from '../screens/RegisterScreen';
 import ConfirmScreen from '../screens/ConfirmScreen';
 
-export default function AuthNavigator() {
+export default AuthNavigator = () => {
   const AuthStack = createStackNavigator();
 
   return (
@@ -17,4 +17,4 @@ export default function AuthNavigator() {
       <AuthStack.Screen name='Confirm' component={ConfirmScreen} />
     </AuthStack.Navigator>
   );
-}
+};
