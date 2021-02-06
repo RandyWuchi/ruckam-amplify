@@ -1,11 +1,6 @@
 import React from 'react';
-import {
-  Image,
-  StyleSheet,
-  Text,
-  TouchableWithoutFeedback,
-  View,
-} from 'react-native';
+import { StyleSheet, Text, TouchableWithoutFeedback, View } from 'react-native';
+import { S3Image } from 'aws-amplify-react-native';
 
 import Colors from '../constants/Colors';
 
@@ -13,7 +8,7 @@ const ProductCard = ({ title, subTitle, image, onPress }) => {
   return (
     <TouchableWithoutFeedback onPress={onPress}>
       <View style={styles.container}>
-        <Image source={image} style={styles.image} />
+        <S3Image imgKey={image} style={styles.image} />
         <View style={styles.textContainer}>
           <Text style={styles.title}>{title}</Text>
           <Text style={styles.subTitle}>{subTitle}</Text>

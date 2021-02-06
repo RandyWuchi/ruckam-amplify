@@ -20,7 +20,7 @@ const ListingScreen = ({ navigation }) => {
   useLayoutEffect(() => {
     navigation.setOptions({
       title: 'RuckAm',
-      headerStyle: { backgroundColor: Colors.light.white, height: 70 },
+      headerStyle: { backgroundColor: Colors.light.white },
       headerTitleStyle: {
         fontSize: 24,
         color: Colors.light.primary,
