@@ -1,5 +1,6 @@
-import React, { useLayoutEffect } from 'react';
+import React, { useContext, useLayoutEffect } from 'react';
 import {
+  Dimensions,
   KeyboardAvoidingView,
   ScrollView,
   StyleSheet,
@@ -7,7 +8,7 @@ import {
   View,
 } from 'react-native';
 import { S3Image } from 'aws-amplify-react-native';
-import MapView, { PROVIDER_GOOGLE, Marker } from 'react-native-maps';
+import MapView, { Marker } from 'react-native-maps';
 
 import ContactSellerForm from '../components/ContactSellerForm';
 import { ListItem } from '../components/Lists';
@@ -17,6 +18,14 @@ import Colors from '../constants/Colors';
 const ListingDetailsScreen = ({ route, navigation }) => {
   const colorScheme = useColorScheme();
   const listing = route.params;
+  const { width, height } = Dimensions.get('window');
+  const listingCount = listing.user.listing.items.length;
+
+  const ASPECT_RATIO = width / height;
+  const LATITUDE = listing.latitude;
+  const LONGITUDE = listing.longitude;
+  const LATITUDE_DELTA = 0.0922;
+  const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO;
 
   useLayoutEffect(() => {
     navigation.setOptions({
@@ -48,27 +57,33 @@ const ListingDetailsScreen = ({ route, navigation }) => {
             <ListItem
               image={listing.user.imageUri}
               title={listing.user.name}
-              subTitle='5 Listings'
+              subTitle={`${listingCount} Listings`}
             />
           </View>
           <View style={styles.descriptionContainer}>
             <Text style={styles.description}>{listing.description}</Text>
           </View>
           <ContactSellerForm listing={listing} />
-          <View style={styles.mapContainer}>
-            <MapView
-              initialRegion={{
-                latitude: 37.78825,
-                longitude: -122.4324,
-                latitudeDelta: 0.0922,
-                longitudeDelta: 0.0421,
-              }}
-              provider={PROVIDER_GOOGLE}
-              style={styles.map}
-            >
-              <Marker />
-            </MapView>
-          </View>
+          {listing.latitude && listing.longitude && (
+            <View style={styles.mapContainer}>
+              <MapView
+                initialRegion={{
+                  latitude: parseFloat(LATITUDE),
+                  longitude: parseFloat(LONGITUDE),
+                  latitudeDelta: parseFloat(LATITUDE_DELTA),
+                  longitudeDelta: parseFloat(LONGITUDE_DELTA),
+                }}
+                style={styles.map}
+              >
+                <Marker
+                  coordinate={{
+                    latitude: parseFloat(LATITUDE),
+                    longitude: parseFloat(LONGITUDE),
+                  }}
+                />
+              </MapView>
+            </View>
+          )}
         </View>
       </ScrollView>
       <View style={{ height: 100 }} />

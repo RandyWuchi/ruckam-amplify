@@ -15,7 +15,8 @@ export const getUser = /* GraphQL */ `
           price
           category
           description
-          location
+          latitude
+          longitude
           images
           userID
           createdAt
@@ -71,7 +72,8 @@ export const getListing = /* GraphQL */ `
       price
       category
       description
-      location
+      latitude
+      longitude
       images
       userID
       user {
@@ -106,7 +108,8 @@ export const listListings = /* GraphQL */ `
         price
         category
         description
-        location
+        latitude
+        longitude
         images
         userID
         user {

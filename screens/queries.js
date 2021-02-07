@@ -53,7 +53,8 @@ export const listListings = /* GraphQL */ `
         price
         category
         description
-        location
+        latitude
+        longitude
         images
         userID
         user {
@@ -63,6 +64,20 @@ export const listListings = /* GraphQL */ `
           imageUri
           createdAt
           updatedAt
+          listing {
+            items {
+              updatedAt
+              title
+              price
+              longitude
+              latitude
+              images
+              id
+              description
+              createdAt
+              category
+            }
+          }
         }
         createdAt
         updatedAt

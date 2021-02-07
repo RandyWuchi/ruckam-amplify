@@ -10,7 +10,7 @@ import Text from '../components/Text';
 import Colors from '../constants/Colors';
 import { UserContext } from '../context/UserContext';
 import routes from '../navigation/routes';
-import { listListings } from '../src/graphql/queries';
+import { listListings } from './queries';
 
 const ListingScreen = ({ navigation }) => {
   const [listings, setListings] = useState([]);

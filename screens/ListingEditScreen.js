@@ -79,7 +79,8 @@ const ListingEditScreen = () => {
         description: values.description,
         category: values.category,
         images: imagesUrl,
-        location: location,
+        latitude: location.latitude,
+        longitude: location.longitude,
         userID: userInfo.attributes.sub,
       };
 
