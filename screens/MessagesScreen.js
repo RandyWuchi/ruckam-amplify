@@ -3,7 +3,6 @@ import React, { useContext, useEffect, useLayoutEffect, useState } from 'react';
 import { FlatList, StyleSheet, View } from 'react-native';
 
 import { ListItemSeparator, MessageListItem } from '../components/Lists';
-import ProfilePicture from '../components/ProfilePicture';
 import Text from '../components/Text';
 import Colors from '../constants/Colors';
 import { UserContext } from '../context/UserContext';
@@ -23,7 +22,6 @@ const MessagesScreen = ({ navigation }) => {
         color: Colors.light.primary,
         fontWeight: 'bold',
       },
-      headerLeft: () => <ProfilePicture image={user.imageUri} />,
     });
   }, []);
 

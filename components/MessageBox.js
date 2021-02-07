@@ -2,6 +2,9 @@ import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import dayjs from 'dayjs';
 
+const relativeTime = require('dayjs/plugin/relativeTime');
+dayjs.extend(relativeTime);
+
 import Colors from '../constants/Colors';
 
 const MessageBox = ({ myId, message }) => {
@@ -23,15 +26,12 @@ const MessageBox = ({ myId, message }) => {
             backgroundColor: isMyMessage() ? '#DCF8C5' : 'white',
             marginLeft: isMyMessage() ? 60 : 0,
             marginRight: isMyMessage() ? 0 : 60,
-            marginBottom: isMyMessage() ? 2 : 5,
           },
         ]}
       >
         {!isMyMessage() && <Text style={styles.name}>{message.user.name}</Text>}
         <Text style={styles.message}>{message.content} </Text>
-        <Text style={[styles.time]}>
-          {dayjs(message.createdAt).format('h:mm A')}
-        </Text>
+        <Text style={[styles.time]}>{dayjs(message.createdAt).fromNow()}</Text>
       </View>
     </View>
   );
@@ -45,6 +45,7 @@ const styles = StyleSheet.create({
     paddingLeft: 10,
     paddingRight: 10,
     marginBottom: 5,
+    paddingTop: 10,
   },
   messageBox: {
     borderRadius: 15,
@@ -65,5 +66,6 @@ const styles = StyleSheet.create({
   time: {
     alignSelf: 'flex-end',
     fontSize: 10,
+    marginLeft: 50,
   },
 });

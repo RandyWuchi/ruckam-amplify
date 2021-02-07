@@ -6,6 +6,9 @@ import { StyleSheet, TouchableWithoutFeedback, View } from 'react-native';
 import Swipeable from 'react-native-gesture-handler/Swipeable';
 import { S3Image } from 'aws-amplify-react-native';
 
+const calendar = require('dayjs/plugin/calendar');
+dayjs.extend(calendar);
+
 import Colors from '../../constants/Colors';
 import Text from '../Text';
 import ListItemDeleteAction from './ListItemDeleteAction';
@@ -65,7 +68,14 @@ const MessageListItem = ({ chatRoom }) => {
           <Text style={styles.time}>
             {dayjs(
               chatRoom.lastMessage.updatedAt || chatRoom.lastMessage.createdAt
-            ).format('h:mm A')}
+            ).calendar(null, {
+              sameDay: ' h:mm A', // The same day ( 2:30 AM )
+              nextDay: '[Tomorrow at] h:mm A', // The next day ( Tomorrow at 2:30 AM )
+              nextWeek: 'dddd [at] h:mm A', // The next week ( Sunday at 2:30 AM )
+              lastDay: '[Yesterday ] ', // The day before ( Yesterday )
+              lastWeek: '[Last] dddd', // Last week ( Last Monday  )
+              sameElse: 'DD MMM, YYYY', // Everything else ( 17 MAR, 2020 )
+            })}
           </Text>
         </View>
       </TouchableWithoutFeedback>
