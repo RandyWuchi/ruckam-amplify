@@ -1,4 +1,4 @@
-import React, { useContext, useLayoutEffect } from 'react';
+import React, { useLayoutEffect } from 'react';
 import {
   Dimensions,
   KeyboardAvoidingView,

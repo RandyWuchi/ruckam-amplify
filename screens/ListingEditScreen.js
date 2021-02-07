@@ -96,17 +96,17 @@ const ListingEditScreen = () => {
 
   return (
     <>
-      <ActivityIndicator visible={loading} />
-      <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
-        <KeyboardAvoidingView
-          style={[
-            styles.container,
-            { backgroundColor: Colors[colorScheme].background },
-          ]}
-          enabled={enableShift}
-          behavior='padding'
-        >
-          <ScrollView showsVerticalScrollIndicator={false}>
+      <ScrollView showsVerticalScrollIndicator={false}>
+        <ActivityIndicator visible={loading} />
+        <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
+          <KeyboardAvoidingView
+            style={[
+              styles.container,
+              { backgroundColor: Colors[colorScheme].background },
+            ]}
+            enabled={enableShift}
+            behavior='padding'
+          >
             <Form
               initialValues={{
                 title: '',
@@ -148,9 +148,9 @@ const ListingEditScreen = () => {
               <SubmitButton title='Post' />
               <View style={{ height: 150 }} />
             </Form>
-          </ScrollView>
-        </KeyboardAvoidingView>
-      </TouchableWithoutFeedback>
+          </KeyboardAvoidingView>
+        </TouchableWithoutFeedback>
+      </ScrollView>
     </>
   );
 };
