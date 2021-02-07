@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 import {
   Keyboard,
   KeyboardAvoidingView,
+  ScrollView,
   StyleSheet,
   TouchableWithoutFeedback,
   useColorScheme,
@@ -22,6 +23,7 @@ import {
 } from '../components/Forms';
 import Colors from '../constants/Colors';
 import { categories } from '../data/Categories';
+import useLocation from '../hooks/useLocation';
 import routes from '../navigation/routes';
 import { createListing } from '../src/graphql/mutations';
 
@@ -35,6 +37,7 @@ const validationSchema = Yup.object().shape({
 
 const ListingEditScreen = () => {
   const colorScheme = useColorScheme();
+  const location = useLocation();
   const [loading, setLoading] = useState(false);
   const [enableShift, setEnableShift] = useState(false);
   const navigation = useNavigation();
@@ -76,6 +79,7 @@ const ListingEditScreen = () => {
         description: values.description,
         category: values.category,
         images: imagesUrl,
+        location: location,
         userID: userInfo.attributes.sub,
       };
 
@@ -101,47 +105,49 @@ const ListingEditScreen = () => {
           enabled={enableShift}
           behavior='padding'
         >
-          <Form
-            initialValues={{
-              title: '',
-              price: '',
-              description: '',
-              category: null,
-              images: [],
-            }}
-            validationSchema={validationSchema}
-            onSubmit={(values, { resetForm }) =>
-              handleSubmit(values, { resetForm })
-            }
-          >
-            <FormImagePicker name='images' />
-            <FormField maxLength={255} name='title' placeholder='Title' />
-            <FormField
-              keyboardType='numeric'
-              width={120}
-              maxLength={8}
-              name='price'
-              placeholder='Price'
-            />
-            <FormPicker
-              items={categories}
-              name='category'
-              placeholder='Category'
-              numberOfColumns={3}
-              width='50%'
-              PickerItemComponent={CategoryPickerItem}
-            />
-            <FormField
-              maxLength={255}
-              multiline
-              name='description'
-              placeholder='Description'
-              onFocus={() => setEnableShift(true)}
-            />
+          <ScrollView showsVerticalScrollIndicator={false}>
+            <Form
+              initialValues={{
+                title: '',
+                price: '',
+                description: '',
+                category: null,
+                images: [],
+              }}
+              validationSchema={validationSchema}
+              onSubmit={(values, { resetForm }) =>
+                handleSubmit(values, { resetForm })
+              }
+            >
+              <FormImagePicker name='images' />
+              <FormField maxLength={255} name='title' placeholder='Title' />
+              <FormField
+                keyboardType='numeric'
+                width={120}
+                maxLength={8}
+                name='price'
+                placeholder='Price'
+              />
+              <FormPicker
+                items={categories}
+                name='category'
+                placeholder='Category'
+                numberOfColumns={3}
+                width='50%'
+                PickerItemComponent={CategoryPickerItem}
+              />
+              <FormField
+                maxLength={255}
+                multiline
+                name='description'
+                placeholder='Description'
+                onFocus={() => setEnableShift(true)}
+              />
 
-            <SubmitButton title='Post' />
-            <View style={{ height: 150 }} />
-          </Form>
+              <SubmitButton title='Post' />
+              <View style={{ height: 150 }} />
+            </Form>
+          </ScrollView>
         </KeyboardAvoidingView>
       </TouchableWithoutFeedback>
     </>

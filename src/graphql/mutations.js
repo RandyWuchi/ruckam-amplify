@@ -18,6 +18,7 @@ export const createUser = /* GraphQL */ `
           price
           category
           description
+          location
           images
           userID
           createdAt
@@ -57,6 +58,7 @@ export const updateUser = /* GraphQL */ `
           price
           category
           description
+          location
           images
           userID
           createdAt
@@ -96,6 +98,7 @@ export const deleteUser = /* GraphQL */ `
           price
           category
           description
+          location
           images
           userID
           createdAt
@@ -129,6 +132,7 @@ export const createListing = /* GraphQL */ `
       price
       category
       description
+      location
       images
       userID
       user {
@@ -161,6 +165,7 @@ export const updateListing = /* GraphQL */ `
       price
       category
       description
+      location
       images
       userID
       user {
@@ -193,6 +198,7 @@ export const deleteListing = /* GraphQL */ `
       price
       category
       description
+      location
       images
       userID
       user {

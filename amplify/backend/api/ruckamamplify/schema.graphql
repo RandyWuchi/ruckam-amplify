@@ -13,6 +13,7 @@ type Listing @model @key(name: "byUser", fields: ["userID"]) {
   price: String!
   category: String!
   description: String
+  location: String
   images: [String]
   userID: ID!
   user: User @connection(fields: ["userID"])

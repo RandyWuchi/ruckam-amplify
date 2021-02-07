@@ -15,6 +15,7 @@ export const onCreateUser = /* GraphQL */ `
           price
           category
           description
+          location
           images
           userID
           createdAt
@@ -51,6 +52,7 @@ export const onUpdateUser = /* GraphQL */ `
           price
           category
           description
+          location
           images
           userID
           createdAt
@@ -87,6 +89,7 @@ export const onDeleteUser = /* GraphQL */ `
           price
           category
           description
+          location
           images
           userID
           createdAt
@@ -117,6 +120,7 @@ export const onCreateListing = /* GraphQL */ `
       price
       category
       description
+      location
       images
       userID
       user {
@@ -146,6 +150,7 @@ export const onUpdateListing = /* GraphQL */ `
       price
       category
       description
+      location
       images
       userID
       user {
@@ -175,6 +180,7 @@ export const onDeleteListing = /* GraphQL */ `
       price
       category
       description
+      location
       images
       userID
       user {

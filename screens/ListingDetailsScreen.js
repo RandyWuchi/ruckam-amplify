@@ -7,6 +7,7 @@ import {
   View,
 } from 'react-native';
 import { S3Image } from 'aws-amplify-react-native';
+import MapView, { PROVIDER_GOOGLE, Marker } from 'react-native-maps';
 
 import ContactSellerForm from '../components/ContactSellerForm';
 import { ListItem } from '../components/Lists';
@@ -50,7 +51,24 @@ const ListingDetailsScreen = ({ route, navigation }) => {
               subTitle='5 Listings'
             />
           </View>
+          <View style={styles.descriptionContainer}>
+            <Text style={styles.description}>{listing.description}</Text>
+          </View>
           <ContactSellerForm listing={listing} />
+          <View style={styles.mapContainer}>
+            <MapView
+              initialRegion={{
+                latitude: 37.78825,
+                longitude: -122.4324,
+                latitudeDelta: 0.0922,
+                longitudeDelta: 0.0421,
+              }}
+              provider={PROVIDER_GOOGLE}
+              style={styles.map}
+            >
+              <Marker />
+            </MapView>
+          </View>
         </View>
       </ScrollView>
       <View style={{ height: 100 }} />
@@ -79,9 +97,28 @@ const styles = StyleSheet.create({
     fontWeight: '500',
   },
   userContainer: {
-    marginVertical: 40,
+    marginVertical: 20,
   },
   container: {
     flex: 1,
+  },
+  descriptionContainer: {
+    borderTopWidth: 1,
+    paddingTop: 20,
+    borderTopColor: Colors.light.gray,
+    marginBottom: 20,
+  },
+  description: {
+    fontWeight: '400',
+    padding: 10,
+  },
+  map: {
+    width: '100%',
+    height: '100%',
+  },
+  mapContainer: {
+    height: 300,
+    borderRadius: 5,
+    overflow: 'hidden',
   },
 });

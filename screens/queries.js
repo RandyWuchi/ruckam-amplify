@@ -53,6 +53,7 @@ export const listListings = /* GraphQL */ `
         price
         category
         description
+        location
         images
         userID
         user {

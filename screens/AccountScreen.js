@@ -44,6 +44,7 @@ const AccountScreen = ({ navigation }) => {
           title={user.name}
           subTitle={user.email}
           image={user.imageUri}
+          icon
         />
       </View>
       <View style={styles.container}>
@@ -60,6 +61,7 @@ const AccountScreen = ({ navigation }) => {
                   backgroundColor={item.icon.backgroundColor}
                 />
               }
+              icon
             />
           )}
         />
@@ -68,6 +70,7 @@ const AccountScreen = ({ navigation }) => {
         title='Log Out'
         IconComponent={<Icon name='logout' backgroundColor='#ffe66d' />}
         onPress={handleLogOut}
+        icon
       />
       <View style={styles.brand}>
         <Text style={styles.brandText}>RuckAm</Text>
