@@ -20,6 +20,7 @@ import {
   FormProfileImage,
   SubmitButton,
 } from '../components/Forms';
+import Screen from '../components/Screen';
 import Colors from '../constants/Colors';
 import routes from '../navigation/routes';
 
@@ -83,64 +84,66 @@ const RegisterScreen = ({ navigation }) => {
   return (
     <>
       <ActivityIndicator visible={loading} />
-      <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
-        <KeyboardAvoidingView
-          style={[
-            styles.container,
-            { backgroundColor: Colors[colorScheme].background },
-          ]}
-          behavior='padding'
-        >
-          <Form
-            initialValues={{
-              fullName: '',
-              email: '',
-              password: '',
-              profilePhoto: null,
-            }}
-            onSubmit={handleSubmit}
-            validationSchema={validationSchema}
+      <Screen>
+        <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
+          <KeyboardAvoidingView
+            style={[
+              styles.container,
+              { backgroundColor: Colors[colorScheme].background },
+            ]}
+            behavior='padding'
           >
-            <FormProfileImage name='profilePhoto' />
-            <ErrorMessage error={error} visible={error} />
-            <FormField
-              autoCorrect={false}
-              icon='account'
-              name='fullName'
-              placeholder='Name'
-            />
-            <FormField
-              name='email'
-              autoCorrect={false}
-              autoCapitalize='none'
-              icon='email'
-              keyboardType='email-address'
-              placeholder='Email'
-              textContentType='emailAddress'
-            />
-            <FormField
-              name='password'
-              autoCapitalize='none'
-              autoCorrect={false}
-              icon='lock'
-              placeholder='Password'
-              textContentType='password'
-              secureTextEntry
-            />
-            <SubmitButton title='Register' />
-            <TouchableOpacity
-              style={styles.login}
-              onPress={() => navigation.replace(routes.LOGIN)}
+            <Form
+              initialValues={{
+                fullName: '',
+                email: '',
+                password: '',
+                profilePhoto: null,
+              }}
+              onSubmit={handleSubmit}
+              validationSchema={validationSchema}
             >
-              <Text style={{ color: '#2e2e2e', marginTop: 10 }}>
-                Already have an account ?{' '}
-                <Text style={{ color: Colors.light.primary }}>Login</Text>
-              </Text>
-            </TouchableOpacity>
-          </Form>
-          <View style={{ height: 50 }} />
-        </KeyboardAvoidingView>
-      </TouchableWithoutFeedback>
+              <FormProfileImage name='profilePhoto' />
+              <ErrorMessage error={error} visible={error} />
+              <FormField
+                autoCorrect={false}
+                icon='account'
+                name='fullName'
+                placeholder='Name'
+              />
+              <FormField
+                name='email'
+                autoCorrect={false}
+                autoCapitalize='none'
+                icon='email'
+                keyboardType='email-address'
+                placeholder='Email'
+                textContentType='emailAddress'
+              />
+              <FormField
+                name='password'
+                autoCapitalize='none'
+                autoCorrect={false}
+                icon='lock'
+                placeholder='Password'
+                textContentType='password'
+                secureTextEntry
+              />
+              <SubmitButton title='Register' />
+              <TouchableOpacity
+                style={styles.login}
+                onPress={() => navigation.replace(routes.LOGIN)}
+              >
+                <Text style={{ color: '#2e2e2e', marginTop: 10 }}>
+                  Already have an account ?{' '}
+                  <Text style={{ color: Colors.light.primary }}>Login</Text>
+                </Text>
+              </TouchableOpacity>
+            </Form>
+            <View style={{ height: 50 }} />
+          </KeyboardAvoidingView>
+        </TouchableWithoutFeedback>
+      </Screen>
     </>
   );
 };

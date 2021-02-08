@@ -27,6 +27,7 @@ import { categories } from '../data/Categories';
 import useLocation from '../hooks/useLocation';
 import routes from '../navigation/routes';
 import { createListing } from '../src/graphql/mutations';
+import Screen from '../components/Screen';
 
 const validationSchema = Yup.object().shape({
   title: Yup.string().required().min(1).label('Title'),
@@ -105,61 +106,63 @@ const ListingEditScreen = () => {
 
   return (
     <>
-      <ScrollView showsVerticalScrollIndicator={false}>
-        <ActivityIndicator visible={loading} />
-        <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
-          <KeyboardAvoidingView
-            style={[
-              styles.container,
-              { backgroundColor: Colors[colorScheme].background },
-            ]}
-            enabled={enableShift}
-            behavior='padding'
-          >
-            <Form
-              initialValues={{
-                title: '',
-                price: '',
-                description: '',
-                category: null,
-                images: [],
-              }}
-              validationSchema={validationSchema}
-              onSubmit={(values, { resetForm }) =>
-                handleSubmit(values, { resetForm })
-              }
+      <ActivityIndicator visible={loading} />
+      <Screen>
+        <ScrollView showsVerticalScrollIndicator={false}>
+          <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
+            <KeyboardAvoidingView
+              style={[
+                styles.container,
+                { backgroundColor: Colors[colorScheme].background },
+              ]}
+              enabled={enableShift}
+              behavior='padding'
             >
-              <FormImagePicker name='images' />
-              <FormField maxLength={255} name='title' placeholder='Title' />
-              <FormField
-                keyboardType='numeric'
-                width={120}
-                maxLength={8}
-                name='price'
-                placeholder='Price'
-              />
-              <FormPicker
-                items={categories}
-                name='category'
-                placeholder='Category'
-                numberOfColumns={3}
-                width='50%'
-                PickerItemComponent={CategoryPickerItem}
-              />
-              <FormField
-                maxLength={255}
-                multiline
-                name='description'
-                placeholder='Description'
-                onFocus={() => setEnableShift(true)}
-              />
+              <Form
+                initialValues={{
+                  title: '',
+                  price: '',
+                  description: '',
+                  category: null,
+                  images: [],
+                }}
+                validationSchema={validationSchema}
+                onSubmit={(values, { resetForm }) =>
+                  handleSubmit(values, { resetForm })
+                }
+              >
+                <FormImagePicker name='images' />
+                <FormField maxLength={255} name='title' placeholder='Title' />
+                <FormField
+                  keyboardType='numeric'
+                  width={120}
+                  maxLength={8}
+                  name='price'
+                  placeholder='Price'
+                />
+                <FormPicker
+                  items={categories}
+                  name='category'
+                  placeholder='Category'
+                  numberOfColumns={3}
+                  width='50%'
+                  PickerItemComponent={CategoryPickerItem}
+                />
+                <FormField
+                  maxLength={255}
+                  multiline
+                  name='description'
+                  placeholder='Description'
+                  onFocus={() => setEnableShift(true)}
+                />
 
-              <SubmitButton title='Post' />
-              <View style={{ height: 150 }} />
-            </Form>
-          </KeyboardAvoidingView>
-        </TouchableWithoutFeedback>
-      </ScrollView>
+                <SubmitButton title='Post' />
+                <View style={{ height: 150 }} />
+              </Form>
+            </KeyboardAvoidingView>
+          </TouchableWithoutFeedback>
+        </ScrollView>
+      </Screen>
     </>
   );
 };

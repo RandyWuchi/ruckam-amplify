@@ -71,30 +71,32 @@ const ConfirmScreen = () => {
   return (
     <>
       <ActivityIndicator visible={loading} />
-      <KeyboardAvoidingView
-        style={[
-          styles.container,
-          { backgroundColor: Colors[colorScheme].background },
-        ]}
-      >
-        <Form
-          initialValues={{ code: '' }}
-          onSubmit={handleSubmit}
-          validationSchema={validationSchema}
+      <Screen>
+        <KeyboardAvoidingView
+          style={[
+            styles.container,
+            { backgroundColor: Colors[colorScheme].background },
+          ]}
         >
-          <ErrorMessage visible={error} error={error} />
-          <FormField
-            autoCapitalize='none'
-            autoCorrect={false}
-            icon='email'
-            name='code'
-            keyboardType='numeric'
-            placeholder='Enter the code your received'
-          />
+          <Form
+            initialValues={{ code: '' }}
+            onSubmit={handleSubmit}
+            validationSchema={validationSchema}
+          >
+            <ErrorMessage visible={error} error={error} />
+            <FormField
+              autoCapitalize='none'
+              autoCorrect={false}
+              icon='email'
+              name='code'
+              keyboardType='numeric'
+              placeholder='Enter the code your received'
+            />
 
-          <SubmitButton title='Confirm' />
-        </Form>
-      </KeyboardAvoidingView>
+            <SubmitButton title='Confirm' />
+          </Form>
+        </KeyboardAvoidingView>
+      </Screen>
     </>
   );
 };

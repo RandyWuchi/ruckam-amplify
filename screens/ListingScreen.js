@@ -10,7 +10,7 @@ import Text from '../components/Text';
 import Colors from '../constants/Colors';
 import { UserContext } from '../context/UserContext';
 import routes from '../navigation/routes';
-import { listListings } from './queries';
+import { listingByDate } from './queries';
 
 const ListingScreen = ({ navigation }) => {
   const [listings, setListings] = useState([]);
@@ -34,8 +34,13 @@ const ListingScreen = ({ navigation }) => {
     setRefreshing(true);
 
     try {
-      const fetchedListing = await API.graphql(graphqlOperation(listListings));
-      setListings(fetchedListing.data.listListings.items);
+      const fetchedListing = await API.graphql(
+        graphqlOperation(listingByDate, {
+          queryName: 'Listing',
+          sortDirection: 'DESC',
+        })
+      );
+      setListings(fetchedListing.data.listingByDate.items);
     } catch (error) {
       console.log('Error @fetchListing:', error);
     } finally {

@@ -25,6 +25,7 @@ import { AuthContext } from '../context/AuthContext';
 import { UserContext } from '../context/UserContext';
 import authStorage from '../auth/storage';
 import routes from '../navigation/routes';
+import Screen from '../components/Screen';
 
 const validationSchema = Yup.object().shape({
   email: Yup.string().required().email().label('Email'),
@@ -72,55 +73,57 @@ const LoginScreen = ({ navigation }) => {
   return (
     <>
       <ActivityIndicator visible={loading} />
-      <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
-        <KeyboardAvoidingView
-          style={[
-            styles.container,
-            { backgroundColor: Colors[colorScheme].background },
-          ]}
-          behavior='padding'
-        >
-          <Image style={styles.logo} source={require('../assets/logo.png')} />
-          <Form
-            initialValues={{ email: '', password: '' }}
-            onSubmit={handleSubmit}
-            validationSchema={validationSchema}
+      <Screen>
+        <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
+          <KeyboardAvoidingView
+            style={[
+              styles.container,
+              { backgroundColor: Colors[colorScheme].background },
+            ]}
+            behavior='padding'
           >
-            <ErrorMessage
-              error='Invalid email and/or password'
-              visible={loginFailed}
-            />
-            <FormField
-              name='email'
-              autoCorrect={false}
-              autoCapitalize='none'
-              icon='email'
-              keyboardType='email-address'
-              placeholder='Email'
-              textContentType='emailAddress'
-            />
-            <FormField
-              name='password'
-              autoCapitalize='none'
-              autoCorrect={false}
-              icon='lock'
-              placeholder='Password'
-              textContentType='password'
-              secureTextEntry
-            />
-            <SubmitButton title='Login' />
-            <TouchableOpacity
-              style={styles.register}
-              onPress={() => navigation.replace(routes.REGISTER)}
+            <Image style={styles.logo} source={require('../assets/logo.png')} />
+            <Form
+              initialValues={{ email: '', password: '' }}
+              onSubmit={handleSubmit}
+              validationSchema={validationSchema}
             >
-              <Text style={{ color: '#2e2e2e' }}>
-                Dont have an account ?{' '}
-                <Text style={{ color: Colors.light.primary }}>Register</Text>
-              </Text>
-            </TouchableOpacity>
-          </Form>
-        </KeyboardAvoidingView>
-      </TouchableWithoutFeedback>
+              <ErrorMessage
+                error='Invalid email and/or password'
+                visible={loginFailed}
+              />
+              <FormField
+                name='email'
+                autoCorrect={false}
+                autoCapitalize='none'
+                icon='email'
+                keyboardType='email-address'
+                placeholder='Email'
+                textContentType='emailAddress'
+              />
+              <FormField
+                name='password'
+                autoCapitalize='none'
+                autoCorrect={false}
+                icon='lock'
+                placeholder='Password'
+                textContentType='password'
+                secureTextEntry
+              />
+              <SubmitButton title='Login' />
+              <TouchableOpacity
+                style={styles.register}
+                onPress={() => navigation.replace(routes.REGISTER)}
+              >
+                <Text style={{ color: '#2e2e2e' }}>
+                  Dont have an account ?{' '}
+                  <Text style={{ color: Colors.light.primary }}>Register</Text>
+                </Text>
+              </TouchableOpacity>
+            </Form>
+          </KeyboardAvoidingView>
+        </TouchableWithoutFeedback>
+      </Screen>
     </>
   );
 };

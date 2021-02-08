@@ -86,3 +86,62 @@ export const listListings = /* GraphQL */ `
     }
   }
 `;
+
+export const listingByDate = /* GraphQL */ `
+  query ListingByDate(
+    $queryName: String
+    $createdAt: ModelStringKeyConditionInput
+    $sortDirection: ModelSortDirection
+    $filter: ModelListingFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    listingByDate(
+      queryName: $queryName
+      createdAt: $createdAt
+      sortDirection: $sortDirection
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+    ) {
+      items {
+        id
+        title
+        price
+        category
+        description
+        latitude
+        longitude
+        address
+        images
+        queryName
+        createdAt
+        userID
+        user {
+          id
+          name
+          email
+          imageUri
+          createdAt
+          updatedAt
+          listing {
+            items {
+              updatedAt
+              title
+              price
+              longitude
+              latitude
+              images
+              id
+              description
+              createdAt
+              category
+            }
+          }
+        }
+        updatedAt
+      }
+      nextToken
+    }
+  }
+`;
