@@ -7,7 +7,14 @@ type User @model {
   chatRoomUser: [ChatRoomUser] @connection(keyName: "byUser", fields: ["id"])
 }
 
-type Listing @model @key(name: "byUser", fields: ["userID"]) {
+type Listing
+  @model
+  @key(name: "byUser", fields: ["userID"])
+  @key(
+    name: "queryName"
+    fields: ["queryName", "createdAt"]
+    queryField: "listingByDate"
+  ) {
   id: ID!
   title: String!
   price: String!
@@ -15,7 +22,10 @@ type Listing @model @key(name: "byUser", fields: ["userID"]) {
   description: String
   latitude: String
   longitude: String
+  address: String
   images: [String]
+  queryName: String
+  createdAt: String
   userID: ID!
   user: User @connection(fields: ["userID"])
 }

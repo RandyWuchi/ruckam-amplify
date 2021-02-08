@@ -74,6 +74,7 @@ const ListingDetailsScreen = ({ route, navigation }) => {
                   longitudeDelta: parseFloat(LONGITUDE_DELTA),
                 }}
                 style={styles.map}
+                showsUserLocation={true}
               >
                 <Marker
                   coordinate={{

@@ -17,9 +17,11 @@ export const onCreateUser = /* GraphQL */ `
           description
           latitude
           longitude
+          address
           images
-          userID
+          queryName
           createdAt
+          userID
           updatedAt
         }
         nextToken
@@ -55,9 +57,11 @@ export const onUpdateUser = /* GraphQL */ `
           description
           latitude
           longitude
+          address
           images
-          userID
+          queryName
           createdAt
+          userID
           updatedAt
         }
         nextToken
@@ -93,9 +97,11 @@ export const onDeleteUser = /* GraphQL */ `
           description
           latitude
           longitude
+          address
           images
-          userID
+          queryName
           createdAt
+          userID
           updatedAt
         }
         nextToken
@@ -125,7 +131,10 @@ export const onCreateListing = /* GraphQL */ `
       description
       latitude
       longitude
+      address
       images
+      queryName
+      createdAt
       userID
       user {
         id
@@ -141,7 +150,6 @@ export const onCreateListing = /* GraphQL */ `
         createdAt
         updatedAt
       }
-      createdAt
       updatedAt
     }
   }
@@ -156,7 +164,10 @@ export const onUpdateListing = /* GraphQL */ `
       description
       latitude
       longitude
+      address
       images
+      queryName
+      createdAt
       userID
       user {
         id
@@ -172,7 +183,6 @@ export const onUpdateListing = /* GraphQL */ `
         createdAt
         updatedAt
       }
-      createdAt
       updatedAt
     }
   }
@@ -187,7 +197,10 @@ export const onDeleteListing = /* GraphQL */ `
       description
       latitude
       longitude
+      address
       images
+      queryName
+      createdAt
       userID
       user {
         id
@@ -203,7 +216,6 @@ export const onDeleteListing = /* GraphQL */ `
         createdAt
         updatedAt
       }
-      createdAt
       updatedAt
     }
   }

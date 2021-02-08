@@ -17,9 +17,11 @@ export const getUser = /* GraphQL */ `
           description
           latitude
           longitude
+          address
           images
-          userID
+          queryName
           createdAt
+          userID
           updatedAt
         }
         nextToken
@@ -74,7 +76,10 @@ export const getListing = /* GraphQL */ `
       description
       latitude
       longitude
+      address
       images
+      queryName
+      createdAt
       userID
       user {
         id
@@ -90,7 +95,6 @@ export const getListing = /* GraphQL */ `
         createdAt
         updatedAt
       }
-      createdAt
       updatedAt
     }
   }
@@ -110,7 +114,10 @@ export const listListings = /* GraphQL */ `
         description
         latitude
         longitude
+        address
         images
+        queryName
+        createdAt
         userID
         user {
           id
@@ -120,7 +127,6 @@ export const listListings = /* GraphQL */ `
           createdAt
           updatedAt
         }
-        createdAt
         updatedAt
       }
       nextToken
@@ -358,6 +364,50 @@ export const listMessages = /* GraphQL */ `
         chatRoom {
           id
           lastMessageID
+          createdAt
+          updatedAt
+        }
+        updatedAt
+      }
+      nextToken
+    }
+  }
+`;
+export const listingByDate = /* GraphQL */ `
+  query ListingByDate(
+    $queryName: String
+    $createdAt: ModelStringKeyConditionInput
+    $sortDirection: ModelSortDirection
+    $filter: ModelListingFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    listingByDate(
+      queryName: $queryName
+      createdAt: $createdAt
+      sortDirection: $sortDirection
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+    ) {
+      items {
+        id
+        title
+        price
+        category
+        description
+        latitude
+        longitude
+        address
+        images
+        queryName
+        createdAt
+        userID
+        user {
+          id
+          name
+          email
+          imageUri
           createdAt
           updatedAt
         }

@@ -1,6 +1,6 @@
 import { useNavigation } from '@react-navigation/native';
 import { API, Auth, graphqlOperation, Storage } from 'aws-amplify';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   Keyboard,
   KeyboardAvoidingView,
@@ -11,6 +11,7 @@ import {
   View,
 } from 'react-native';
 import * as Yup from 'yup';
+import Geocoder from 'react-native-geocoding';
 
 import ActivityIndicator from '../components/ActivityIndicator';
 import CategoryPickerItem from '../components/CategoryPickerItem';
@@ -42,6 +43,14 @@ const ListingEditScreen = () => {
   const [enableShift, setEnableShift] = useState(false);
   const navigation = useNavigation();
 
+  const getAddress = () => {
+    Geocoder.from(location.latitude, location.longitude)
+      .then((json) => {
+        var addressComponent = json.results[0].formatted_address;
+      })
+      .catch((error) => console.warn(error));
+  };
+
   const uploadImage = async (uri) => {
     try {
       const response = await fetch(uri);
@@ -64,15 +73,15 @@ const ListingEditScreen = () => {
   const handleSubmit = async (values, { resetForm }) => {
     setLoading(true);
 
+    const listingAddress = getAddress();
+
     const images = values.images;
     let imagesUrl = [];
     imagesUrl = await Promise.all(images.map((image) => uploadImage(image)));
-
     try {
       const userInfo = await Auth.currentAuthenticatedUser({
         bypassCache: true,
       });
-
       const newListing = {
         title: values.title,
         price: values.price,
@@ -81,9 +90,9 @@ const ListingEditScreen = () => {
         images: imagesUrl,
         latitude: location.latitude,
         longitude: location.longitude,
+        address: listingAddress,
         userID: userInfo.attributes.sub,
       };
-
       await API.graphql(graphqlOperation(createListing, { input: newListing }));
       navigation.navigate(routes.LISTING);
     } catch (error) {
