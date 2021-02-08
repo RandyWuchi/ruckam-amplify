@@ -1,4 +1,6 @@
-import React, { useLayoutEffect } from 'react';
+import React, { useLayoutEffect, useRef } from 'react';
+import { SharedElement } from 'react-navigation-shared-element';
+import * as Animatable from 'react-native-animatable';
 import {
   Dimensions,
   KeyboardAvoidingView,
@@ -14,16 +16,18 @@ import ContactSellerForm from '../components/ContactSellerForm';
 import { ListItem } from '../components/Lists';
 import Text from '../components/Text';
 import Colors from '../constants/Colors';
+import { SimpleLineIcons } from '@expo/vector-icons';
 
 const ListingDetailsScreen = ({ route, navigation }) => {
   const colorScheme = useColorScheme();
-  const listing = route.params;
+  const buttonRef = useRef();
+  const item = route.params;
   const { width, height } = Dimensions.get('window');
-  const listingCount = listing.user.listing.items.length;
+  const listingCount = item.user.listing.items.length;
 
   const ASPECT_RATIO = width / height;
-  const LATITUDE = listing.latitude;
-  const LONGITUDE = listing.longitude;
+  const LATITUDE = item.latitude;
+  const LONGITUDE = item.longitude;
   const LATITUDE_DELTA = 0.0922;
   const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO;
 
@@ -49,22 +53,45 @@ const ListingDetailsScreen = ({ route, navigation }) => {
       behavior='position'
     >
       <ScrollView>
-        <S3Image imgKey={listing.images[0]} style={styles.image} />
+        <SharedElement id={`item.${item.id}.images[0]`}>
+          <S3Image imgKey={item.images[0]} style={styles.image} />
+        </SharedElement>
         <View style={styles.detailsContainer}>
-          <Text style={styles.title}>{listing.title}</Text>
-          <Text style={styles.price}>{'$' + listing.price}</Text>
+          <SharedElement id={`item.${item.id}.title`}>
+            <Text style={styles.title}>{item.title}</Text>
+          </SharedElement>
+          <SharedElement id={`item.${item.id}.price`}>
+            <Text style={styles.price}>{'$' + item.price}</Text>
+          </SharedElement>
+          <View style={styles.locationDetails}>
+            <Animatable.View
+              ref={buttonRef}
+              animation='fadeIn'
+              duration={600}
+              delay={300}
+            >
+              <SimpleLineIcons
+                name='location-pin'
+                size={30}
+                color={Colors.light.medium}
+              />
+            </Animatable.View>
+            <SharedElement id={`item.${item.id}.address`}>
+              <Text style={styles.address}>{item.address}</Text>
+            </SharedElement>
+          </View>
           <View style={styles.userContainer}>
             <ListItem
-              image={listing.user.imageUri}
-              title={listing.user.name}
+              image={item.user.imageUri}
+              title={item.user.name}
               subTitle={`${listingCount} Listings`}
             />
           </View>
           <View style={styles.descriptionContainer}>
-            <Text style={styles.description}>{listing.description}</Text>
+            <Text style={styles.description}>{item.description}</Text>
           </View>
-          <ContactSellerForm listing={listing} />
-          {listing.latitude && listing.longitude && (
+          <ContactSellerForm listing={item} />
+          {item.latitude && item.longitude && (
             <View style={styles.mapContainer}>
               <MapView
                 initialRegion={{
@@ -136,5 +163,15 @@ const styles = StyleSheet.create({
     height: 300,
     borderRadius: 5,
     overflow: 'hidden',
+  },
+  address: {
+    fontSize: 16,
+    color: Colors.light.medium,
+    marginLeft: 2,
+  },
+  locationDetails: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginVertical: 10,
   },
 });

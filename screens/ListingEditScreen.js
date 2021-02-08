@@ -2,6 +2,7 @@ import { useNavigation } from '@react-navigation/native';
 import { API, Auth, graphqlOperation, Storage } from 'aws-amplify';
 import React, { useEffect, useState } from 'react';
 import {
+  Alert,
   Keyboard,
   KeyboardAvoidingView,
   ScrollView,
@@ -42,14 +43,25 @@ const ListingEditScreen = () => {
   const location = useLocation();
   const [loading, setLoading] = useState(false);
   const [enableShift, setEnableShift] = useState(false);
+  const [listingAddress, setListingAddress] = useState(null);
   const navigation = useNavigation();
 
-  const getAddress = () => {
-    Geocoder.from(location.latitude, location.longitude)
-      .then((json) => {
-        var addressComponent = json.results[0].formatted_address;
-      })
-      .catch((error) => console.warn(error));
+  useEffect(() => {
+    getAddress();
+  }, [location]);
+
+  const getAddress = async () => {
+    try {
+      await Geocoder.from(location.latitude, location.longitude)
+        .then((json) => {
+          const addressComponent = json.results[0].formatted_address;
+
+          setListingAddress(addressComponent);
+        })
+        .catch((error) => console.warn(error));
+    } catch (error) {
+      console.log('Error @getAddress:', error);
+    }
   };
 
   const uploadImage = async (uri) => {
@@ -73,8 +85,6 @@ const ListingEditScreen = () => {
 
   const handleSubmit = async (values, { resetForm }) => {
     setLoading(true);
-
-    const listingAddress = getAddress();
 
     const images = values.images;
     let imagesUrl = [];
@@ -108,16 +118,15 @@ const ListingEditScreen = () => {
     <>
       <ActivityIndicator visible={loading} />
       <Screen>
-        <ScrollView showsVerticalScrollIndicator={false}>
+        <ScrollView
+          showsVerticalScrollIndicator={false}
+          style={[
+            styles.container,
+            { backgroundColor: Colors[colorScheme].background },
+          ]}
+        >
           <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
-            <KeyboardAvoidingView
-              style={[
-                styles.container,
-                { backgroundColor: Colors[colorScheme].background },
-              ]}
-              enabled={enableShift}
-              behavior='padding'
-            >
+            <KeyboardAvoidingView enabled={enableShift} behavior='position'>
               <Form
                 initialValues={{
                   title: '',
@@ -157,8 +166,8 @@ const ListingEditScreen = () => {
                 />
 
                 <SubmitButton title='Post' />
-                <View style={{ height: 150 }} />
               </Form>
+              <View style={{ height: 50 }} />
             </KeyboardAvoidingView>
           </TouchableWithoutFeedback>
         </ScrollView>

@@ -1,32 +1,57 @@
+import { SimpleLineIcons } from '@expo/vector-icons';
 import React from 'react';
-import {
-  StyleSheet,
-  TouchableWithoutFeedback,
-  useColorScheme,
-  View,
-} from 'react-native';
+import { StyleSheet, useColorScheme, View } from 'react-native';
+import { SharedElement } from 'react-navigation-shared-element';
+import { TouchableOpacity } from 'react-native-gesture-handler';
 import { S3Image } from 'aws-amplify-react-native';
 
 import Colors from '../constants/Colors';
 import Text from './Text';
 
-const Card = ({ title, subTitle, image, onPress }) => {
+const Card = ({
+  title,
+  subTitle,
+  image,
+  onPress,
+  address,
+  id,
+  idTitle,
+  idSubTitle,
+  idAddress,
+}) => {
   const colorScheme = useColorScheme();
   return (
-    <TouchableWithoutFeedback onPress={onPress}>
-      <View
-        style={[
-          styles.card,
-          { backgroundColor: Colors[colorScheme].background },
-        ]}
+    <View
+      style={[styles.card, { backgroundColor: Colors[colorScheme].background }]}
+    >
+      <TouchableOpacity
+        activeOpacity={0.8}
+        style={{ marginBottom: 14 }}
+        onPress={onPress}
       >
-        <S3Image style={styles.image} imgKey={image} />
+        <SharedElement id={id}>
+          <S3Image style={styles.image} imgKey={image} />
+        </SharedElement>
         <View style={styles.detailsContainer}>
-          <Text style={styles.title}>{title}</Text>
-          <Text style={styles.subTitle}>{subTitle}</Text>
+          <SharedElement id={idTitle}>
+            <Text style={styles.title}>{title}</Text>
+          </SharedElement>
+          <SharedElement id={idSubTitle}>
+            <Text style={styles.subTitle}>{subTitle}</Text>
+          </SharedElement>
+          <View style={styles.locationDetails}>
+            <SimpleLineIcons
+              name='location-pin'
+              size={20}
+              color={Colors.light.medium}
+            />
+            <SharedElement id={idAddress}>
+              <Text style={styles.address}>{address}</Text>
+            </SharedElement>
+          </View>
         </View>
-      </View>
-    </TouchableWithoutFeedback>
+      </TouchableOpacity>
+    </View>
   );
 };
 
@@ -42,13 +67,26 @@ const styles = StyleSheet.create({
     height: 200,
   },
   detailsContainer: {
-    padding: 20,
+    paddingHorizontal: 20,
+    marginTop: 20,
   },
   title: {
     marginBottom: 7,
+    fontSize: 20,
+    fontWeight: '600',
   },
   subTitle: {
     fontWeight: '700',
     color: Colors.light.primary,
+  },
+  address: {
+    fontSize: 16,
+    color: Colors.light.medium,
+    marginLeft: 2,
+  },
+  locationDetails: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginVertical: 10,
   },
 });

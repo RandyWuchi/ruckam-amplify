@@ -48,6 +48,22 @@ const ListingScreen = ({ navigation }) => {
     }
   };
 
+  const renderItem = ({ item }) => (
+    <View style={{ padding: 20 }}>
+      <Card
+        title={item.title}
+        subTitle={'$' + item.price}
+        image={item.images[0]}
+        address={item.address}
+        id={`item.${item.id}.images[0]`}
+        idTitle={`item.${item.id}.title`}
+        idSubTitle={`item.${item.id}.price`}
+        idAddress={`item.${item.id}.address`}
+        onPress={() => navigation.navigate(routes.LISTING_DETAILS, item)}
+      />
+    </View>
+  );
+
   useEffect(() => {
     fetchListings();
   }, []);
@@ -64,21 +80,10 @@ const ListingScreen = ({ navigation }) => {
       ) : (
         <FlatList
           data={listings}
-          keyExtractor={(listing) => listing.id.toString()}
+          keyExtractor={(item) => item.id.toString()}
           onRefresh={fetchListings}
           refreshing={refreshing}
-          renderItem={({ item }) => (
-            <View style={{ padding: 20 }}>
-              <Card
-                title={item.title}
-                subTitle={'$' + item.price}
-                image={item.images[0]}
-                onPress={() =>
-                  navigation.navigate(routes.LISTING_DETAILS, item)
-                }
-              />
-            </View>
-          )}
+          renderItem={renderItem}
         />
       )}
 

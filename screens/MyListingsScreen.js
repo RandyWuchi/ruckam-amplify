@@ -46,6 +46,16 @@ const MyListingsScreen = ({ navigation }) => {
     fetchMyListings();
   }, []);
 
+  const renderItem = ({ item }) => (
+    <View style={styles.cards}>
+      <ProductCard
+        title={item.title}
+        subTitle={'$' + item.price}
+        image={item.images}
+      />
+    </View>
+  );
+
   return (
     <View style={styles.container}>
       {myListings.length === 0 ? (
@@ -60,15 +70,7 @@ const MyListingsScreen = ({ navigation }) => {
           keyExtractor={(myListing) => myListing.id.toString()}
           showsVerticalScrollIndicator={false}
           scrollEventThrottle={16}
-          renderItem={({ item }) => (
-            <View style={styles.cards}>
-              <ProductCard
-                title={item.title}
-                subTitle={'$' + item.price}
-                image={item.images}
-              />
-            </View>
-          )}
+          renderItem={renderItem}
         />
       )}
       <NewListingButton />

@@ -12,18 +12,22 @@ const LoadingScreen = () => {
 
   useEffect(() => {
     setTimeout(async () => {
-      const user = await Auth.currentAuthenticatedUser();
+      try {
+        const user = await Auth.currentAuthenticatedUser();
 
-      if (user) {
-        setUser({
-          isLoggedIn: true,
-          id: user.attributes.sub,
-          email: user.attributes.email,
-          name: user.attributes.name,
-          imageUri: user.attributes.picture,
-        });
-      } else {
-        setUser((state) => ({ ...state, isLoggedIn: false }));
+        if (!user) {
+          setUser((state) => ({ ...state, isLoggedIn: false }));
+        } else {
+          setUser({
+            isLoggedIn: true,
+            id: user.attributes.sub,
+            email: user.attributes.email,
+            name: user.attributes.name,
+            imageUri: user.attributes.picture,
+          });
+        }
+      } catch (error) {
+        console.log('Error signin in:', error);
       }
     }, 1500);
   }, []);
