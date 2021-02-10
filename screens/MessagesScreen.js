@@ -63,6 +63,7 @@ const MessagesScreen = ({ navigation }) => {
       ) : (
         <FlatList
           data={chatRooms}
+          bounces={false}
           keyExtractor={(item) => item.id}
           ItemSeparatorComponent={ListItemSeparator}
           renderItem={({ item }) => (

@@ -3,7 +3,9 @@ import LottieView from 'lottie-react-native';
 import { StyleSheet, View } from 'react-native';
 
 function ActivityIndicator({ visible = false }) {
-  if (!visible) return null;
+  if (!visible) {
+    return null;
+  }
 
   return (
     <View style={styles.overlay}>

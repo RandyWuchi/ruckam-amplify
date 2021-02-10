@@ -2,10 +2,10 @@ import { useNavigation } from '@react-navigation/native';
 import { API, Auth, graphqlOperation, Storage } from 'aws-amplify';
 import React, { useEffect, useState } from 'react';
 import {
-  Alert,
   Keyboard,
   KeyboardAvoidingView,
   ScrollView,
+  StatusBar,
   StyleSheet,
   TouchableWithoutFeedback,
   useColorScheme,
@@ -15,7 +15,6 @@ import * as Yup from 'yup';
 import Geocoder from 'react-native-geocoding';
 
 import ActivityIndicator from '../components/ActivityIndicator';
-import CategoryPickerItem from '../components/CategoryPickerItem';
 import {
   Form,
   FormField,
@@ -24,11 +23,9 @@ import {
   SubmitButton,
 } from '../components/Forms';
 import Colors from '../constants/Colors';
-import { categories } from '../data/Categories';
 import useLocation from '../hooks/useLocation';
 import routes from '../navigation/routes';
 import { createListing } from '../src/graphql/mutations';
-import Screen from '../components/Screen';
 
 const validationSchema = Yup.object().shape({
   title: Yup.string().required().min(1).label('Title'),
@@ -117,61 +114,53 @@ const ListingEditScreen = () => {
   return (
     <>
       <ActivityIndicator visible={loading} />
-      <Screen>
-        <ScrollView
-          showsVerticalScrollIndicator={false}
-          style={[
-            styles.container,
-            { backgroundColor: Colors[colorScheme].background },
-          ]}
-        >
-          <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
-            <KeyboardAvoidingView enabled={enableShift} behavior='position'>
-              <Form
-                initialValues={{
-                  title: '',
-                  price: '',
-                  description: '',
-                  category: null,
-                  images: [],
-                }}
-                validationSchema={validationSchema}
-                onSubmit={(values, { resetForm }) =>
-                  handleSubmit(values, { resetForm })
-                }
-              >
-                <FormImagePicker name='images' />
-                <FormField maxLength={255} name='title' placeholder='Title' />
-                <FormField
-                  keyboardType='numeric'
-                  width={120}
-                  maxLength={8}
-                  name='price'
-                  placeholder='Price'
-                />
-                <FormPicker
-                  items={categories}
-                  name='category'
-                  placeholder='Category'
-                  numberOfColumns={3}
-                  width='50%'
-                  PickerItemComponent={CategoryPickerItem}
-                />
-                <FormField
-                  maxLength={255}
-                  multiline
-                  name='description'
-                  placeholder='Description'
-                  onFocus={() => setEnableShift(true)}
-                />
+      <StatusBar hidden />
+      <ScrollView
+        showsVerticalScrollIndicator={false}
+        style={[
+          styles.container,
+          { backgroundColor: Colors[colorScheme].background },
+        ]}
+      >
+        <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
+          <KeyboardAvoidingView enabled={enableShift} behavior='position'>
+            <Form
+              initialValues={{
+                title: '',
+                price: '',
+                description: '',
+                category: null,
+                images: [],
+              }}
+              validationSchema={validationSchema}
+              onSubmit={(values, { resetForm }) =>
+                handleSubmit(values, { resetForm })
+              }
+            >
+              <FormImagePicker name='images' />
+              <FormField maxLength={255} name='title' placeholder='Title' />
+              <FormField
+                keyboardType='numeric'
+                width={120}
+                maxLength={8}
+                name='price'
+                placeholder='Price'
+              />
+              <FormPicker name='category' placeholder='Category' width='50%' />
+              <FormField
+                maxLength={255}
+                multiline
+                name='description'
+                placeholder='Description'
+                onFocus={() => setEnableShift(true)}
+              />
 
-                <SubmitButton title='Post' />
-              </Form>
-              <View style={{ height: 50 }} />
-            </KeyboardAvoidingView>
-          </TouchableWithoutFeedback>
-        </ScrollView>
-      </Screen>
+              <SubmitButton title='Post' />
+            </Form>
+            <View style={{ height: 50 }} />
+          </KeyboardAvoidingView>
+        </TouchableWithoutFeedback>
+      </ScrollView>
     </>
   );
 };

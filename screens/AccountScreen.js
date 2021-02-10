@@ -50,6 +50,7 @@ const AccountScreen = ({ navigation }) => {
       <View style={styles.container}>
         <FlatList
           data={menuItems}
+          bounces={false}
           keyExtractor={(menuItem) => menuItem.title}
           ItemSeparatorComponent={ListItemSeparator}
           renderItem={({ item }) => (

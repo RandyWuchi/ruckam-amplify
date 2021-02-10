@@ -1,7 +1,12 @@
 import { useRoute } from '@react-navigation/native';
 import { API, Auth, graphqlOperation } from 'aws-amplify';
 import React, { useContext, useState } from 'react';
-import { KeyboardAvoidingView, StyleSheet, useColorScheme } from 'react-native';
+import {
+  KeyboardAvoidingView,
+  StatusBar,
+  StyleSheet,
+  useColorScheme,
+} from 'react-native';
 import * as Yup from 'yup';
 
 import ActivityIndicator from '../components/ActivityIndicator';
@@ -71,32 +76,31 @@ const ConfirmScreen = () => {
   return (
     <>
       <ActivityIndicator visible={loading} />
-      <Screen>
-        <KeyboardAvoidingView
-          style={[
-            styles.container,
-            { backgroundColor: Colors[colorScheme].background },
-          ]}
+      <StatusBar hidden />
+      <KeyboardAvoidingView
+        style={[
+          styles.container,
+          { backgroundColor: Colors[colorScheme].background },
+        ]}
+      >
+        <Form
+          initialValues={{ code: '' }}
+          onSubmit={handleSubmit}
+          validationSchema={validationSchema}
         >
-          <Form
-            initialValues={{ code: '' }}
-            onSubmit={handleSubmit}
-            validationSchema={validationSchema}
-          >
-            <ErrorMessage visible={error} error={error} />
-            <FormField
-              autoCapitalize='none'
-              autoCorrect={false}
-              icon='email'
-              name='code'
-              keyboardType='numeric'
-              placeholder='Enter the code your received'
-            />
+          <ErrorMessage visible={error} error={error} />
+          <FormField
+            autoCapitalize='none'
+            autoCorrect={false}
+            icon='email'
+            name='code'
+            keyboardType='numeric'
+            placeholder='Enter the code your received'
+          />
 
-            <SubmitButton title='Confirm' />
-          </Form>
-        </KeyboardAvoidingView>
-      </Screen>
+          <SubmitButton title='Confirm' />
+        </Form>
+      </KeyboardAvoidingView>
     </>
   );
 };

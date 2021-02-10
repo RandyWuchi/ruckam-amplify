@@ -34,7 +34,7 @@ export default function App() {
           style={{ flex: 1, backgroundColor: Colors[colorScheme].background }}
         >
           <Navigation colorScheme={colorScheme} />
-          <StatusBar style='auto' />
+          <StatusBar />
         </SafeAreaProvider>
       </UserProvider>
     </AuthProvider>

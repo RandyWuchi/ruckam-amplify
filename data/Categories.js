@@ -54,3 +54,90 @@ export const categories = [
     value: 9,
   },
 ];
+
+export const categories2 = [
+  {
+    icon: 'television-classic',
+    name: 'Television',
+  },
+  {
+    icon: 'tshirt-crew-outline',
+    name: 'Clothing',
+  },
+  {
+    icon: 'camera-outline',
+    name: 'Camera',
+  },
+  {
+    icon: 'cellphone-iphone',
+    name: 'Phone',
+  },
+  {
+    icon: 'headphones',
+    name: 'Headphone',
+  },
+  {
+    icon: 'gamepad-variant-outline',
+    name: 'Game',
+  },
+  {
+    icon: 'bed-king-outline',
+    name: 'Bed',
+  },
+  {
+    icon: 'laptop',
+    name: 'Laptop',
+  },
+  {
+    icon: 'bicycle',
+    name: 'Bicycle',
+  },
+  {
+    icon: 'blender',
+    name: 'Kitchen Utils',
+  },
+  {
+    icon: 'boombox',
+    name: 'SoundSystem',
+  },
+  {
+    icon: 'briefcase-variant-outline',
+    name: 'Briefcase',
+  },
+  {
+    icon: 'buffet',
+    name: 'Tv Stand',
+  },
+  {
+    icon: 'desk',
+    name: 'Desk',
+  },
+  {
+    icon: 'lamp',
+    name: 'Lamp',
+  },
+  {
+    icon: 'fridge-outline',
+    name: 'Fridge',
+  },
+  {
+    icon: 'dishwasher',
+    name: 'Dishwasher',
+  },
+  {
+    icon: 'dresser-outline',
+    name: 'Dresser',
+  },
+  {
+    icon: 'watch',
+    name: 'Watch',
+  },
+  {
+    icon: 'glasses',
+    name: 'Eye glass',
+  },
+  {
+    icon: 'application',
+    name: 'Others',
+  },
+];
